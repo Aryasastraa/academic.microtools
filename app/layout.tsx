@@ -53,7 +53,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${inter.variable} h-full`}>
       <head>
-        <script type="text/javascript" src="https://pl30855845.effectivecpmnetwork.com/b7/fc/18/b7fc182134c8db10e4e7cc0fdac70d10.js" suppressHydrationWarning></script>
+        {/* <script type="text/javascript" src="https://pl30855845.effectivecpmnetwork.com/b7/fc/18/b7fc182134c8db10e4e7cc0fdac70d10.js" suppressHydrationWarning></script> */}
       </head>
       <body
         className="min-h-full flex flex-col antialiased"
@@ -71,7 +71,7 @@ export default function RootLayout({
             };
           `
         }} />
-        <script type="text/javascript" src="https://www.highperformanceformat.com/70e6f807302e834020b77b685cfe4480/invoke.js" suppressHydrationWarning></script>
+        {/* <script type="text/javascript" src="https://www.highperformanceformat.com/70e6f807302e834020b77b685cfe4480/invoke.js" suppressHydrationWarning></script> */}
 
         {children}
       </body>
