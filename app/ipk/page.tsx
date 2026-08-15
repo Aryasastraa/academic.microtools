@@ -22,16 +22,12 @@ export const metadata: Metadata = {
 
 function IpkFallback() {
   return (
-    <div
-      className="min-h-screen flex items-center justify-center"
-      style={{ background: "#050818" }}
-    >
+    <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
       <div className="text-center">
         <div
-          className="w-12 h-12 rounded-full border-2 animate-spin mx-auto mb-4"
-          style={{ borderColor: "rgba(139,92,246,0.5)", borderTopColor: "transparent" }}
+          className="w-12 h-12 rounded-full border-[4px] border-black border-t-transparent animate-spin mx-auto mb-4"
         />
-        <p style={{ color: "#64748b", fontSize: "0.875rem" }}>Memuat kalkulator…</p>
+        <p className="font-bold text-sm">Memuat kalkulator…</p>
       </div>
     </div>
   );

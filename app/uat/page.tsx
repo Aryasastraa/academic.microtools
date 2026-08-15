@@ -3,30 +3,28 @@ import { Suspense } from "react";
 import UatCalculator from "./UatCalculator";
 
 export const metadata: Metadata = {
-  title: "Kalkulator UAT / Skala Likert — Persentase Kelayakan Sistem",
+  title: "Kalkulator UAT (User Acceptance Test) Skala Likert",
   description:
-    "Hitung persentase kelayakan sistem (User Acceptance Testing) dari kuesioner Skala Likert. Input dinamis, visualisasi otomatis, share via link.",
+    "Hitung persentase kelayakan sistem (UAT) dari kuesioner Skala Likert 4 atau 5 poin. Import dari Google Forms, lengkap dengan visualisasi dan skala interpretasi.",
   keywords: [
     "kalkulator UAT",
-    "user acceptance testing",
-    "skala likert",
+    "user acceptance test",
+    "hitung skala likert",
     "persentase kelayakan sistem",
-    "kalkulator likert",
+    "skripsi UAT otomatis",
   ],
   openGraph: {
-    title: "Kalkulator UAT / Skala Likert Online",
-    description:
-      "Hitung persentase kelayakan sistem dari kuesioner UAT. Real-time, gratis, tanpa login.",
+    title: "Kalkulator UAT & Skala Likert Online",
+    description: "Hitung persentase kelayakan sistem dari kuesioner UAT dengan Skala Likert. Import dari Google Forms.",
   },
 };
 
 function UatFallback() {
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: "#050818" }}>
+    <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
       <div className="text-center">
-        <div className="w-12 h-12 rounded-full border-2 animate-spin mx-auto mb-4"
-          style={{ borderColor: "rgba(16,185,129,0.5)", borderTopColor: "transparent" }} />
-        <p style={{ color: "#64748b", fontSize: "0.875rem" }}>Memuat kalkulator…</p>
+        <div className="w-12 h-12 rounded-full border-[4px] border-black border-t-transparent animate-spin mx-auto mb-4" />
+        <p className="font-bold text-sm">Memuat kalkulator…</p>
       </div>
     </div>
   );

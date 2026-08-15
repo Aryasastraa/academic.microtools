@@ -5,27 +5,26 @@ import ToeflCalculator from "./ToeflCalculator";
 export const metadata: Metadata = {
   title: "Kalkulator Konversi Skor TOEFL ITP / PBT",
   description:
-    "Konversi jumlah jawaban benar Listening, Structure, dan Reading menjadi skor akhir TOEFL ITP / PBT. Sering digunakan sebagai syarat sidang skripsi.",
+    "Hitung konversi skor TOEFL ITP secara otomatis dari jumlah jawaban benar. Cek apakah Anda memenuhi syarat bahasa Inggris untuk sidang skripsi.",
   keywords: [
-    "kalkulator toefl",
-    "konversi skor toefl",
-    "hitung skor toefl",
-    "toefl itp pbt",
+    "kalkulator TOEFL",
+    "konversi TOEFL ITP",
+    "skor TOEFL skripsi",
+    "hitung nilai TOEFL",
     "syarat sidang skripsi",
   ],
   openGraph: {
-    title: "Kalkulator Konversi Skor TOEFL ITP / PBT Online",
-    description:
-      "Hitung prediksi skor TOEFL Anda berdasarkan jumlah jawaban yang benar. Gratis, instan, tanpa login.",
+    title: "Kalkulator Konversi Skor TOEFL ITP",
+    description: "Cek prediksi skor TOEFL ITP dari jumlah jawaban benar per section. Gratis.",
   },
 };
 
 function ToeflFallback() {
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: "#050818" }}>
+    <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
       <div className="text-center">
-        <div className="w-12 h-12 rounded-full border-2 animate-spin mx-auto mb-4"
-          style={{ borderColor: "rgba(59,130,246,0.5)", borderTopColor: "transparent" }} />
+        <div className="w-12 h-12 rounded-full border-[4px] border-black border-t-transparent animate-spin mx-auto mb-4" />
+        <p className="font-bold text-sm">Memuat kalkulator…</p>
       </div>
     </div>
   );

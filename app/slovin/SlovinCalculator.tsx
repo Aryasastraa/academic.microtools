@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 
 // ─────────────────────────────────────────────
 //  Constants
 // ─────────────────────────────────────────────
 
 const COMMON_MARGINS = [
-  { label: "1%", value: 0.01, desc: "Sangat ketat — riset presisi tinggi" },
-  { label: "5%", value: 0.05, desc: "Standar umum skripsi & tesis" },
-  { label: "10%", value: 0.10, desc: "Toleransi longgar — survei cepat" },
+  { label: "1%", value: 0.01, desc: "Sangat ketat" },
+  { label: "5%", value: 0.05, desc: "Standar skripsi" },
+  { label: "10%", value: 0.10, desc: "Toleransi longgar" },
 ];
 
 // ─────────────────────────────────────────────
@@ -47,111 +48,93 @@ export default function SlovinCalculator() {
   }, [population]);
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#050818" }}>
-      {/* Ambient orbs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl animate-float"
-          style={{ background: "rgba(234,179,8,0.07)" }} />
-        <div className="absolute bottom-1/4 right-1/3 w-80 h-80 rounded-full blur-3xl animate-float-2"
-          style={{ background: "rgba(245,158,11,0.06)" }} />
-      </div>
-
+    <div className="min-h-screen flex flex-col">
       {/* Header Ad */}
-      <div className="ad-placeholder w-full" style={{ height: "90px" }} role="complementary" aria-label="Ad Space">
-        <span>Advertisement · 728 × 90</span>
+      <div className="p-4 flex justify-center mt-2">
       </div>
 
       {/* Navbar */}
       <nav className="relative z-10 flex items-center justify-between px-5 py-4 max-w-4xl mx-auto w-full">
-        <a href="/" className="flex items-center gap-2 text-sm transition-colors" style={{ color: "#64748b" }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#f1f5f9")}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#64748b")}>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        <Link href="/" className="flex items-center gap-2 font-black uppercase text-sm border-2 border-transparent hover:border-black hover:bg-black hover:text-white px-3 py-1 rounded transition-all">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          AcademicTools
-        </a>
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center"
-          style={{ background: "linear-gradient(135deg, #eab308, #f59e0b)" }}>
-          <span className="text-white text-xs font-black select-none">A</span>
+          Kembali
+        </Link>
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center border-[3px] border-black bg-[var(--brand-orange)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform rotate-3">
+          <span className="text-black text-sm font-black select-none">A</span>
         </div>
       </nav>
 
       {/* Main */}
       <main className="relative z-10 max-w-4xl mx-auto w-full px-4 pb-20 flex-1">
         <header className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-4"
-            style={{ background: "rgba(234,179,8,0.1)", border: "1px solid rgba(234,179,8,0.22)", color: "#facc15" }}>
-            Teknik Sampling · Penelitian Kuantitatif
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase mb-4 brutal-badge bg-[var(--brand-orange)]">
+            Teknik Sampling · Kuantitatif
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 tracking-tight" style={{ color: "#f1f5f9" }}>
-            Kalkulator <span style={{ background: "linear-gradient(135deg, #eab308, #f59e0b)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Rumus Slovin</span>
+          <h1 className="text-4xl sm:text-5xl font-black mb-3 tracking-tight uppercase">
+            Rumus Slovin
           </h1>
-          <p className="max-w-lg mx-auto text-sm sm:text-base leading-relaxed" style={{ color: "#64748b" }}>
-            Hitung jumlah <strong style={{ color: "#94a3b8" }}>sampel minimal</strong> penelitian Anda secara instan.
+          <p className="max-w-lg mx-auto text-base font-bold leading-relaxed">
+            Hitung jumlah sampel minimal penelitian Anda secara instan.
           </p>
         </header>
 
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Left: Input */}
-          <div className="flex-1 min-w-0 space-y-5">
+          <div className="flex-1 w-full min-w-0 space-y-6">
             {/* Formula display */}
-            <div className="glass-card rounded-2xl p-6 text-center">
-              <p className="text-xs uppercase tracking-wider mb-3 font-semibold" style={{ color: "#475569" }}>Rumus Slovin</p>
-              <div className="text-2xl sm:text-3xl font-black tracking-tight" style={{ color: "#f1f5f9" }}>
-                <span style={{ color: "#facc15" }}>n</span> = <span style={{ color: "#94a3b8" }}>N</span> / (1 + <span style={{ color: "#94a3b8" }}>N</span> · <span style={{ color: "#f59e0b" }}>e</span><sup>2</sup>)
+            <div className="brutal-card p-6 bg-white text-center transform -rotate-1">
+              <p className="text-sm font-black uppercase tracking-wider mb-4 border-b-2 border-black inline-block pb-1">
+                Rumus Slovin
+              </p>
+              <div className="text-4xl sm:text-5xl font-black tracking-tight">
+                <span className="text-[var(--brand-orange)] bg-black px-2 text-white border-2 border-black">n</span> = <span>N</span> / (1 + <span>N</span> · <span className="bg-[var(--brand-mint)] px-2 border-2 border-black">e</span>²)
               </div>
-              <div className="flex flex-wrap justify-center gap-4 mt-4 text-xs" style={{ color: "#64748b" }}>
-                <span><strong style={{ color: "#facc15" }}>n</strong> = Jumlah Sampel</span>
-                <span><strong style={{ color: "#94a3b8" }}>N</strong> = Populasi</span>
-                <span><strong style={{ color: "#f59e0b" }}>e</strong> = Margin Error</span>
+              <div className="flex flex-wrap justify-center gap-4 mt-6 text-sm font-bold uppercase">
+                <span className="bg-black text-white px-2 border-2 border-black">n = Sampel</span>
+                <span className="bg-slate-100 px-2 border-2 border-black">N = Populasi</span>
+                <span className="bg-[var(--brand-mint)] px-2 border-2 border-black">e = Margin Error</span>
               </div>
             </div>
 
             {/* Population input */}
-            <div className="glass-card rounded-2xl p-6">
-              <label htmlFor="input-population" className="block text-sm font-bold mb-3" style={{ color: "#e2e8f0" }}>
+            <div className="brutal-card p-6 bg-white">
+              <label htmlFor="input-population" className="block text-sm font-black uppercase mb-3">
                 Jumlah Populasi (N)
               </label>
               <input
                 id="input-population"
                 type="number"
                 min={1}
-                placeholder="Masukkan jumlah populasi, misal: 150"
+                placeholder="Misal: 150"
                 value={population}
                 onChange={(e) => setPopulation(e.target.value)}
-                className="text-input w-full text-lg py-3"
-                style={{ fontSize: "1.125rem" }}
+                className="text-input w-full text-xl py-4 font-black"
               />
-              <p className="mt-2 text-xs" style={{ color: "#475569" }}>
+              <p className="mt-3 text-xs font-bold bg-[var(--brand-yellow)] p-2 border-2 border-black inline-block transform rotate-1">
                 Total individu dalam populasi target penelitian Anda.
               </p>
             </div>
 
             {/* Margin of error */}
-            <div className="glass-card rounded-2xl p-6">
-              <label className="block text-sm font-bold mb-3" style={{ color: "#e2e8f0" }}>
+            <div className="brutal-card p-6 bg-[var(--brand-mint)]">
+              <label className="block text-sm font-black uppercase mb-3">
                 Margin Error (e)
               </label>
 
               {/* Quick buttons */}
-              <div className="grid grid-cols-3 gap-2 mb-4">
+              <div className="grid grid-cols-3 gap-3 mb-5">
                 {COMMON_MARGINS.map((m) => {
                   const isSelected = !useCustom && marginPct === String(m.value * 100);
                   return (
                     <button
                       key={m.label}
                       onClick={() => { setMarginPct(String(m.value * 100)); setUseCustom(false); }}
-                      className="p-3 rounded-xl text-center transition-all duration-200"
-                      style={{
-                        background: isSelected ? "linear-gradient(135deg, #eab308, #f59e0b)" : "rgba(234,179,8,0.07)",
-                        border: `1px solid ${isSelected ? "transparent" : "rgba(234,179,8,0.2)"}`,
-                        color: isSelected ? "white" : "#94a3b8",
-                        boxShadow: isSelected ? "0 4px 16px rgba(234,179,8,0.3)" : "none",
-                      }}
+                      className={`p-3 border-[3px] border-black rounded-lg transition-transform text-center ${isSelected ? 'bg-black text-white transform -translate-y-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : 'bg-white hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'}`}
                     >
-                      <div className="text-lg font-black">{m.label}</div>
-                      <div className="text-[10px] mt-0.5 leading-tight" style={{ color: isSelected ? "rgba(255,255,255,0.8)" : "#475569" }}>
+                      <div className="text-xl font-black">{m.label}</div>
+                      <div className="text-[9px] font-bold mt-1 uppercase leading-tight">
                         {m.desc}
                       </div>
                     </button>
@@ -160,19 +143,14 @@ export default function SlovinCalculator() {
               </div>
 
               {/* Custom input */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 p-3 bg-white border-[3px] border-black rounded-lg">
                 <button
                   onClick={() => setUseCustom(true)}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
-                  style={{
-                    background: useCustom ? "rgba(234,179,8,0.15)" : "rgba(234,179,8,0.05)",
-                    color: useCustom ? "#facc15" : "#475569",
-                    border: `1px solid ${useCustom ? "rgba(234,179,8,0.4)" : "rgba(234,179,8,0.15)"}`,
-                  }}
+                  className={`text-xs font-black uppercase px-3 py-2 border-2 border-black ${useCustom ? 'bg-[var(--brand-orange)]' : 'bg-slate-100 hover:bg-slate-200'}`}
                 >
                   Custom
                 </button>
-                {useCustom && (
+                {useCustom ? (
                   <div className="flex items-center gap-2 flex-1">
                     <input
                       id="input-custom-margin"
@@ -182,50 +160,46 @@ export default function SlovinCalculator() {
                       step={0.1}
                       value={marginPct}
                       onChange={(e) => setMarginPct(e.target.value)}
-                      className="number-input flex-1"
-                      style={{ fontSize: "1rem" }}
+                      className="text-input flex-1 font-black"
                     />
-                    <span className="text-sm font-bold" style={{ color: "#94a3b8" }}>%</span>
+                    <span className="text-lg font-black">%</span>
                   </div>
+                ) : (
+                  <div className="text-sm font-bold opacity-50 flex-1">Atau masukkan angka custom</div>
                 )}
               </div>
             </div>
 
             {/* Comparison table */}
             {comparisonRows.length > 0 && (
-              <div className="glass-card rounded-2xl p-6">
-                <h3 className="text-sm font-bold mb-4" style={{ color: "#e2e8f0" }}>
-                  Tabel Perbandingan Margin Error
+              <div className="brutal-card p-6 bg-white overflow-hidden">
+                <h3 className="text-sm font-black uppercase mb-2">
+                  Perbandingan Margin Error
                 </h3>
-                <p className="text-xs mb-4" style={{ color: "#475569" }}>
-                  Populasi <strong style={{ color: "#facc15" }}>N = {parseInt(population).toLocaleString("id-ID")}</strong>
+                <p className="text-xs font-bold mb-4">
+                  Populasi (N) = <span className="bg-[var(--brand-yellow)] px-1 border border-black">{parseInt(population).toLocaleString("id-ID")}</span>
                 </p>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
+                <div className="overflow-x-auto border-[3px] border-black rounded-lg">
+                  <table className="brutal-table border-0 w-full text-sm">
                     <thead>
-                      <tr style={{ borderBottom: "1px solid rgba(234,179,8,0.15)" }}>
-                        <th className="text-left py-2 font-semibold" style={{ color: "#475569" }}>Margin Error</th>
-                        <th className="text-right py-2 font-semibold" style={{ color: "#475569" }}>Sampel (n)</th>
-                        <th className="text-right py-2 font-semibold" style={{ color: "#475569" }}>Rasio</th>
+                      <tr>
+                        <th className="text-left font-black border-0 border-b-[3px] border-r-[3px] border-black">Margin Error</th>
+                        <th className="text-right font-black border-0 border-b-[3px] border-r-[3px] border-black">Sampel (n)</th>
+                        <th className="text-right font-black border-0 border-b-[3px] border-black">Rasio</th>
                       </tr>
                     </thead>
                     <tbody>
                       {comparisonRows.map((row) => {
                         const isActive = parseFloat(marginPct) === row.pct;
                         return (
-                          <tr key={row.pct}
-                            className="transition-colors"
-                            style={{
-                              borderBottom: "1px solid rgba(99,102,241,0.06)",
-                              background: isActive ? "rgba(234,179,8,0.08)" : "transparent",
-                            }}>
-                            <td className="py-2.5 font-bold" style={{ color: isActive ? "#facc15" : "#94a3b8" }}>
-                              {row.pct}% {isActive && "◀"}
+                          <tr key={row.pct} className={isActive ? "bg-[var(--brand-blue)]" : ""}>
+                            <td className="font-bold border-0 border-b-[3px] border-r-[3px] border-black">
+                              {row.pct}% {isActive && <span className="ml-1">◀</span>}
                             </td>
-                            <td className="py-2.5 text-right font-black" style={{ color: isActive ? "#facc15" : "#818cf8" }}>
+                            <td className="text-right font-black border-0 border-b-[3px] border-r-[3px] border-black">
                               {row.sample.toLocaleString("id-ID")}
                             </td>
-                            <td className="py-2.5 text-right" style={{ color: "#64748b" }}>
+                            <td className="text-right font-bold border-0 border-b-[3px] border-black">
                               {((row.sample / parseInt(population)) * 100).toFixed(1)}%
                             </td>
                           </tr>
@@ -239,98 +213,82 @@ export default function SlovinCalculator() {
           </div>
 
           {/* Right: Results */}
-          <aside className="w-full lg:w-72 xl:w-80 flex-shrink-0 lg:sticky lg:top-4 space-y-4">
-            <div className="glass-card rounded-2xl p-6">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-center mb-5" style={{ color: "#475569" }}>
+          <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-4 space-y-6">
+            <div className="brutal-card p-6 bg-white text-center">
+              <h2 className="text-sm font-black uppercase tracking-wider mb-6 border-b-4 border-black inline-block pb-1">
                 Hasil Perhitungan
               </h2>
 
               {result ? (
                 <>
-                  {/* Big number */}
-                  <div className="text-center mb-5">
-                    <div className="text-6xl font-black" style={{ color: "#facc15" }}>
+                  <div className="mb-6">
+                    <div className="text-6xl font-black bg-[var(--brand-yellow)] border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform rotate-1 inline-block">
                       {result.sample.toLocaleString("id-ID")}
                     </div>
-                    <div className="text-sm mt-1" style={{ color: "#64748b" }}>sampel minimum</div>
+                    <div className="text-sm font-black uppercase mt-4">Sampel Minimum</div>
                   </div>
 
-                  {/* Calculation breakdown */}
-                  <div className="p-4 rounded-xl space-y-2.5" style={{ background: "rgba(234,179,8,0.05)", border: "1px solid rgba(234,179,8,0.15)" }}>
-                    <h3 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#475569" }}>
-                      Detail Perhitungan
-                    </h3>
-                    <div className="flex justify-between text-xs">
-                      <span style={{ color: "#64748b" }}>N (Populasi)</span>
-                      <span className="font-bold" style={{ color: "#f1f5f9" }}>{result.population.toLocaleString("id-ID")}</span>
+                  <div className="p-4 bg-slate-100 border-[3px] border-black text-left space-y-3 font-bold text-sm">
+                    <h3 className="text-xs font-black uppercase border-b-2 border-black pb-1 mb-2">Detail Hitungan</h3>
+                    <div className="flex justify-between">
+                      <span>N (Populasi)</span>
+                      <span>{result.population.toLocaleString("id-ID")}</span>
                     </div>
-                    <div className="flex justify-between text-xs">
-                      <span style={{ color: "#64748b" }}>e (Margin Error)</span>
-                      <span className="font-bold" style={{ color: "#f1f5f9" }}>{(result.margin * 100)}%</span>
+                    <div className="flex justify-between">
+                      <span>e (Margin Error)</span>
+                      <span>{(result.margin * 100)}%</span>
                     </div>
-                    <div className="flex justify-between text-xs">
-                      <span style={{ color: "#64748b" }}>1 + N·e²</span>
-                      <span className="font-bold" style={{ color: "#f1f5f9" }}>{(1 + result.population * result.margin * result.margin).toFixed(4)}</span>
+                    <div className="flex justify-between">
+                      <span>1 + N·e²</span>
+                      <span>{(1 + result.population * result.margin * result.margin).toFixed(4)}</span>
                     </div>
-                    <div className="flex justify-between text-xs" style={{ borderTop: "1px solid rgba(234,179,8,0.15)", paddingTop: "8px" }}>
-                      <span style={{ color: "#64748b" }}>n (Eksak)</span>
-                      <span className="font-bold" style={{ color: "#facc15" }}>{result.exact.toFixed(4)}</span>
-                    </div>
-                    <div className="flex justify-between text-xs">
-                      <span style={{ color: "#64748b" }}>n (Dibulatkan)</span>
-                      <span className="font-black text-sm" style={{ color: "#facc15" }}>{result.sample}</span>
+                    <div className="flex justify-between border-t-[3px] border-black pt-2">
+                      <span>n (Eksak)</span>
+                      <span className="bg-white px-1 border border-black">{result.exact.toFixed(4)}</span>
                     </div>
                   </div>
 
-                  {/* Prose conclusion */}
-                  <div className="mt-4 p-4 rounded-xl" style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)" }}>
-                    <p className="text-xs leading-relaxed" style={{ color: "#94a3b8" }}>
-                      Dengan populasi sebesar <strong style={{ color: "#f1f5f9" }}>{result.population.toLocaleString("id-ID")}</strong> dan margin error <strong style={{ color: "#f1f5f9" }}>{(result.margin * 100)}%</strong>, jumlah sampel minimal yang diperlukan adalah <strong style={{ color: "#10b981" }}>{result.sample.toLocaleString("id-ID")} responden</strong>.
+                  <div className="mt-4 p-4 text-left border-[3px] border-black bg-[var(--brand-blue)] transform -rotate-1">
+                    <p className="text-xs font-bold leading-relaxed">
+                      Dengan populasi sebesar <strong>{result.population.toLocaleString("id-ID")}</strong> dan margin error <strong>{(result.margin * 100)}%</strong>, sampel minimal adalah <strong className="bg-white px-1 border border-black">{result.sample.toLocaleString("id-ID")}</strong>.
                     </p>
-                    <p className="text-[10px] mt-2" style={{ color: "#475569" }}>
-                      💡 Disarankan menambah 10-20% dari jumlah di atas untuk mengantisipasi data tidak valid.
+                    <p className="text-[10px] font-black uppercase mt-3 pt-2 border-t-2 border-black">
+                      💡 Saran: Tambah 10-20% untuk antisipasi data tidak valid.
                     </p>
                   </div>
                 </>
               ) : (
-                <div className="text-center py-8">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center animate-pulseRing"
-                    style={{ background: "rgba(234,179,8,0.08)", border: "1px solid rgba(234,179,8,0.2)" }}>
-                    <span className="font-black text-3xl" style={{ color: "rgba(234,179,8,0.4)" }}>n</span>
+                <div className="py-10">
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-full border-4 border-black border-dashed flex items-center justify-center bg-slate-100">
+                    <span className="font-black text-4xl">n</span>
                   </div>
-                  <p className="text-xs" style={{ color: "#334155" }}>
-                    Masukkan populasi dan margin error<br />untuk menghitung jumlah sampel
+                  <p className="text-sm font-bold">
+                    Masukkan populasi dan margin error untuk menghitung
                   </p>
                 </div>
               )}
             </div>
 
-            {/* Ad */}
-            <div className="ad-placeholder rounded-2xl" style={{ height: "120px" }} role="complementary" aria-label="Ad Space">
-              <span>Advertisement · 300 × 250</span>
-            </div>
-
-            {/* Reference */}
-            <div className="glass-card rounded-2xl p-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#475569" }}>
-                Referensi
-              </h3>
-              <div className="text-xs leading-relaxed space-y-2" style={{ color: "#64748b" }}>
+            <div className="brutal-card p-5 bg-white">
+              <h3 className="text-sm font-black uppercase mb-3 border-b-2 border-black pb-1">Referensi</h3>
+              <div className="text-xs font-bold leading-relaxed space-y-3">
                 <p>Slovin, M.J. (1960). <em>Sampling</em>. New York: Simon and Schuster.</p>
-                <p>Margin error yang umum digunakan dalam penelitian sosial dan pendidikan adalah <strong style={{ color: "#94a3b8" }}>5% (0.05)</strong>.</p>
-                <p>Rumus ini cocok untuk populasi yang <strong style={{ color: "#94a3b8" }}>terhingga (finite)</strong> dan teknik sampling acak sederhana (<em>simple random sampling</em>).</p>
+                <p className="bg-[var(--brand-pink)] p-2 border-2 border-black">
+                  Margin error yang umum digunakan dalam penelitian sosial dan pendidikan adalah <strong>5% (0.05)</strong>.
+                </p>
+                <p>
+                  Hanya cocok untuk populasi <strong>terhingga (finite)</strong> dan teknik <em>simple random sampling</em>.
+                </p>
               </div>
             </div>
           </aside>
         </div>
       </main>
 
-      {/* Footer Ad */}
-      <div className="ad-placeholder w-full" style={{ height: "90px" }} role="complementary" aria-label="Ad Space Footer">
-        <span>Advertisement · 728 × 90</span>
+      <div className="p-4 flex justify-center mt-8">
       </div>
-      <footer className="relative z-10 text-center py-4 text-xs" style={{ color: "#1e293b" }}>
-        © 2025 AcademicTools · Kalkulator Rumus Slovin gratis untuk mahasiswa Indonesia
+      <footer className="relative z-10 text-center py-6 font-bold text-sm border-t-[3px] border-black mt-4 bg-white">
+        © 2025 AcademicTools · Kalkulator Rumus Slovin gratis
       </footer>
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useRef } from "react";
+import Link from "next/link";
 
 // ─────────────────────────────────────────────
 //  Types & Constants
@@ -42,11 +43,11 @@ interface InterpretationInfo {
 }
 
 function getInterpretation(pct: number): InterpretationInfo {
-  if (pct >= 81) return { label: "Sangat Layak", emoji: "🌟", color: "#10b981", bgColor: "rgba(16,185,129,0.12)", borderColor: "rgba(16,185,129,0.3)", desc: "Sistem sangat layak digunakan dan diterima oleh pengguna." };
-  if (pct >= 61) return { label: "Layak", emoji: "👍", color: "#6366f1", bgColor: "rgba(99,102,241,0.12)", borderColor: "rgba(99,102,241,0.3)", desc: "Sistem layak digunakan dengan sedikit perbaikan." };
-  if (pct >= 41) return { label: "Cukup Layak", emoji: "✅", color: "#f59e0b", bgColor: "rgba(245,158,11,0.12)", borderColor: "rgba(245,158,11,0.3)", desc: "Sistem cukup layak, namun perlu perbaikan signifikan." };
-  if (pct >= 21) return { label: "Tidak Layak", emoji: "⚠️", color: "#ef4444", bgColor: "rgba(239,68,68,0.12)", borderColor: "rgba(239,68,68,0.3)", desc: "Sistem tidak layak digunakan dan perlu banyak perbaikan." };
-  return { label: "Sangat Tidak Layak", emoji: "❌", color: "#dc2626", bgColor: "rgba(220,38,38,0.12)", borderColor: "rgba(220,38,38,0.3)", desc: "Sistem tidak dapat diterima sama sekali oleh pengguna." };
+  if (pct >= 81) return { label: "Sangat Layak", emoji: "🌟", color: "#000", bgColor: "var(--brand-mint)", borderColor: "#000", desc: "Sistem sangat layak digunakan dan diterima oleh pengguna." };
+  if (pct >= 61) return { label: "Layak", emoji: "👍", color: "#000", bgColor: "var(--brand-blue)", borderColor: "#000", desc: "Sistem layak digunakan dengan sedikit perbaikan." };
+  if (pct >= 41) return { label: "Cukup Layak", emoji: "✅", color: "#000", bgColor: "var(--brand-yellow)", borderColor: "#000", desc: "Sistem cukup layak, namun perlu perbaikan signifikan." };
+  if (pct >= 21) return { label: "Tidak Layak", emoji: "⚠️", color: "#000", bgColor: "var(--brand-orange)", borderColor: "#000", desc: "Sistem tidak layak digunakan dan perlu banyak perbaikan." };
+  return { label: "Sangat Tidak Layak", emoji: "❌", color: "#000", bgColor: "var(--brand-pink)", borderColor: "#000", desc: "Sistem tidak dapat diterima sama sekali oleh pengguna." };
 }
 
 function newQuestion(idx: number): UatQuestion {
@@ -101,28 +102,22 @@ function parseLikertValue(cell: string, maxScale: number): number | null {
 
 function PercentRing({ pct }: { pct: number }) {
   const info = getInterpretation(pct);
-  const cx = 80, cy = 80, r = 60, sw = 12;
+  const cx = 80, cy = 80, r = 60, sw = 16;
   const circum = 2 * Math.PI * r;
   const filled = (pct / 100) * circum;
 
   return (
     <svg viewBox="0 0 160 160" className="w-full h-full" role="img" aria-label={`Kelayakan ${pct.toFixed(1)}%`}>
-      <defs>
-        <filter id="uat-glow">
-          <feGaussianBlur stdDeviation="3" result="b" />
-          <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-      </defs>
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(30,41,100,0.55)" strokeWidth={sw} />
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke={info.color} strokeWidth={sw}
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#e2e8f0" strokeWidth={sw} />
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke={info.bgColor} strokeWidth={sw}
         strokeDasharray={`${filled} ${circum - filled}`} strokeDashoffset={circum / 4}
-        strokeLinecap="round" filter="url(#uat-glow)"
-        style={{ transition: "stroke-dasharray 0.8s cubic-bezier(0.34,1.56,0.64,1)" }} />
-      <text x={cx} y={cy - 6} textAnchor="middle" fill="white" fontSize="22" fontWeight="900" fontFamily="Inter, sans-serif">
+        strokeLinecap="butt" style={{ transition: "stroke-dasharray 0.8s cubic-bezier(0.34,1.56,0.64,1)" }} />
+      {/* Outer borders for gauge */}
+      <circle cx={cx} cy={cy} r={r + sw/2} fill="none" stroke="#000" strokeWidth="3" />
+      <circle cx={cx} cy={cy} r={r - sw/2} fill="none" stroke="#000" strokeWidth="3" />
+
+      <text x={cx} y={cy} textAnchor="middle" fill="#000" fontSize="28" fontWeight="900" fontFamily="Inter, sans-serif" dominantBaseline="middle">
         {pct.toFixed(1)}%
-      </text>
-      <text x={cx} y={cy + 12} textAnchor="middle" fill="rgba(148,163,184,0.7)" fontSize="9" fontFamily="Inter, sans-serif">
-        Kelayakan
       </text>
     </svg>
   );
@@ -171,7 +166,6 @@ export default function UatCalculator() {
     setQuestions((prev) => {
       const next = [...prev];
       const q = { ...next[qIdx] };
-      // scores array: index = scaleValue - 1
       const scores = [...q.scores];
       while (scores.length < scaleType) scores.push(0);
       scores[scaleValue - 1] = Math.max(0, count);
@@ -253,7 +247,7 @@ export default function UatCalculator() {
 
   // ── Render ─────────────────────────────
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#050818" }}
+    <div className="min-h-screen flex flex-col"
       onDragOver={(e) => { if (e.dataTransfer.types.includes("Files")) { e.preventDefault(); setIsDragOver(true); } }}
       onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setIsDragOver(false); }}
       onDrop={handleDrop}>
@@ -262,113 +256,99 @@ export default function UatCalculator() {
 
       {/* Drag overlay */}
       {isDragOver && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(5,8,24,0.92)", backdropFilter: "blur(12px)" }}>
-          <div className="text-center px-16 py-12 rounded-3xl" style={{ border: "2px dashed rgba(16,185,129,0.7)", background: "rgba(16,185,129,0.08)" }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-md">
+          <div className="text-center px-16 py-12 brutal-card bg-[var(--brand-mint)] transform rotate-2">
             <div className="text-7xl mb-5">📋</div>
-            <h2 className="text-2xl font-extrabold mb-2" style={{ color: "#f1f5f9" }}>Lepaskan file CSV di sini</h2>
-            <p className="text-sm" style={{ color: "#94a3b8" }}>Data UAT akan otomatis diproses</p>
+            <h2 className="text-3xl font-black mb-2 uppercase">Lepaskan file CSV di sini</h2>
+            <p className="text-sm font-bold">Data UAT akan otomatis diproses</p>
           </div>
         </div>
       )}
 
-      {/* Ambient */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div className="absolute top-0 right-1/4 w-96 h-96 rounded-full blur-3xl animate-float" style={{ background: "rgba(16,185,129,0.07)" }} />
-        <div className="absolute bottom-1/3 left-1/4 w-80 h-80 rounded-full blur-3xl animate-float-2" style={{ background: "rgba(99,102,241,0.06)" }} />
-      </div>
-
       {/* Header Ad */}
-      <div className="ad-placeholder w-full" style={{ height: "90px" }} role="complementary" aria-label="Ad Space"><span>Advertisement · 728 × 90</span></div>
+      <div className="p-4 flex justify-center mt-2">
+      </div>
 
       {/* Nav */}
       <nav className="relative z-10 flex items-center justify-between px-5 py-4 max-w-5xl mx-auto w-full">
-        <a href="/" className="flex items-center gap-2 text-sm transition-colors" style={{ color: "#64748b" }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#f1f5f9")}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#64748b")}>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-          AcademicTools
-        </a>
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #10b981, #06b6d4)" }}>
-          <span className="text-white text-xs font-black select-none">A</span>
+        <Link href="/" className="flex items-center gap-2 font-black uppercase text-sm border-2 border-transparent hover:border-black hover:bg-black hover:text-white px-3 py-1 rounded transition-all">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+          Kembali
+        </Link>
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center border-[3px] border-black bg-[var(--brand-mint)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform rotate-3">
+          <span className="text-black text-sm font-black select-none">A</span>
         </div>
       </nav>
 
       {/* Main */}
       <main className="relative z-10 max-w-5xl mx-auto w-full px-4 pb-20 flex-1">
-        <header className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-4"
-            style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.22)", color: "#34d399" }}>
+        <header className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase mb-4 brutal-badge bg-[var(--brand-mint)]">
             User Acceptance Testing · Skala Likert
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 tracking-tight" style={{ color: "#f1f5f9" }}>
-            Kalkulator <span style={{ background: "linear-gradient(135deg, #10b981, #06b6d4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>UAT</span>
+          <h1 className="text-4xl sm:text-5xl font-black mb-3 tracking-tight uppercase">
+            Kalkulator UAT
           </h1>
-          <p className="max-w-lg mx-auto text-sm sm:text-base leading-relaxed" style={{ color: "#64748b" }}>
-            Hitung <strong style={{ color: "#94a3b8" }}>persentase kelayakan sistem</strong> dari kuesioner UAT / Skala Likert.
+          <p className="max-w-lg mx-auto text-base font-bold leading-relaxed">
+            Hitung persentase kelayakan sistem dari kuesioner UAT / Skala Likert.
           </p>
         </header>
 
         {/* Import zone */}
-        <div className="mb-6">
+        <div className="mb-8">
           {importError && (
-            <div className="glass-card rounded-2xl p-4 mb-3" style={{ borderColor: "rgba(239,68,68,0.35)", background: "rgba(239,68,68,0.05)" }}>
+            <div className="brutal-card p-4 mb-4 bg-[var(--brand-pink)]">
               <div className="flex items-start gap-3">
-                <span className="text-lg flex-shrink-0">❌</span>
-                <p className="text-xs leading-relaxed" style={{ color: "#94a3b8" }}>{importError}</p>
-                <button onClick={() => setImportError(null)} className="btn-ghost ml-auto text-xs px-2 py-1 rounded-lg">✕</button>
+                <span className="text-3xl flex-shrink-0">❌</span>
+                <div className="flex-1">
+                  <p className="text-sm font-black mb-1">Gagal membaca file</p>
+                  <p className="text-xs font-bold leading-relaxed">{importError}</p>
+                </div>
+                <button onClick={() => setImportError(null)} className="btn-ghost px-3 py-1 bg-white">✕</button>
               </div>
             </div>
           )}
           <button onClick={() => fileInputRef.current?.click()}
-            className="w-full rounded-2xl py-3 px-6 text-left transition-all duration-200 flex items-center gap-4"
-            style={{ background: "rgba(16,185,129,0.05)", border: "1.5px dashed rgba(16,185,129,0.28)" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(16,185,129,0.09)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(16,185,129,0.05)"; }}>
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "rgba(16,185,129,0.12)" }}>
-              <svg className="w-4 h-4" fill="none" stroke="#34d399" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+            className="w-full btn-ghost border-dashed flex items-center justify-center gap-4 py-6 bg-slate-50"
+          >
+            <div className="w-12 h-12 rounded flex items-center justify-center border-[3px] border-black bg-[var(--brand-yellow)] transform -rotate-3">
+              <span className="text-2xl font-black">+</span>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold" style={{ color: "#6ee7b7" }}>Import CSV dari Google Forms</p>
-              <p className="text-xs mt-0.5" style={{ color: "#475569" }}>Drag &amp; drop atau klik untuk memilih file</p>
+            <div className="text-left">
+              <p className="text-base font-black uppercase">Import CSV dari Google Forms</p>
+              <p className="text-xs font-bold mt-1">Drag &amp; drop atau klik untuk memilih file</p>
             </div>
           </button>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Left: Config + Questions */}
-          <div className="flex-1 min-w-0 space-y-4">
+          <div className="flex-1 min-w-0 space-y-6">
             {/* Config row */}
-            <div className="glass-card rounded-2xl p-5 flex flex-wrap gap-5 items-end">
+            <div className="brutal-card p-5 bg-white flex flex-wrap gap-5 items-end transform -rotate-1">
               <div className="flex-1 min-w-[140px]">
-                <label className="block text-xs font-semibold mb-1.5" style={{ color: "#94a3b8" }}>Tipe Skala</label>
-                <div className="flex gap-2">
+                <label className="block text-xs font-black uppercase mb-2">Tipe Skala</label>
+                <div className="flex gap-3">
                   {([4, 5] as const).map((s) => (
                     <button key={s} onClick={() => { setScaleType(s); setQuestions((q) => q.map((qi) => ({ ...qi, scores: [] }))); }}
-                      className="flex-1 py-2 rounded-xl text-sm font-bold transition-all duration-200"
-                      style={{
-                        background: scaleType === s ? "linear-gradient(135deg, #10b981, #06b6d4)" : "rgba(16,185,129,0.07)",
-                        border: `1px solid ${scaleType === s ? "transparent" : "rgba(16,185,129,0.2)"}`,
-                        color: scaleType === s ? "white" : "#64748b",
-                        boxShadow: scaleType === s ? "0 4px 16px rgba(16,185,129,0.3)" : "none",
-                      }}>
+                      className={`flex-1 py-3 px-2 rounded-lg text-sm font-black uppercase border-[3px] border-black transition-transform ${scaleType === s ? 'bg-black text-white transform -translate-y-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : 'bg-white hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'}`}>
                       {s} Poin
                     </button>
                   ))}
                 </div>
               </div>
               <div className="min-w-[120px]">
-                <label htmlFor="respondent-count" className="block text-xs font-semibold mb-1.5" style={{ color: "#94a3b8" }}>Jumlah Responden</label>
+                <label htmlFor="respondent-count" className="block text-xs font-black uppercase mb-2">Jumlah Responden</label>
                 <input id="respondent-count" type="number" min={1} max={9999} value={respondentCount}
                   onChange={(e) => setRespondentCount(Math.max(1, parseInt(e.target.value) || 1))}
-                  className="number-input w-full" style={{ fontSize: "1rem" }} />
+                  className="text-input w-full font-black text-lg py-3" />
               </div>
             </div>
 
             {/* Scale legend */}
             <div className="flex flex-wrap gap-2">
               {scales.map((s) => (
-                <span key={s.value} className="text-xs px-2.5 py-1 rounded-full"
-                  style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)", color: "#6ee7b7" }}>
+                <span key={s.value} className="text-xs font-bold uppercase px-3 py-1 border-2 border-black bg-[var(--brand-mint)]">
                   {s.value} = {s.label}
                 </span>
               ))}
@@ -380,124 +360,125 @@ export default function UatCalculator() {
               const qMax = scaleType * respondentCount;
               const qPct = qMax > 0 ? (qTotal / qMax) * 100 : 0;
               const totalResp = q.scores.reduce((s, v) => s + v, 0);
+              const isOdd = (qi + 1) % 2 !== 0;
+
               return (
-                <div key={q.id} className="glass-card rounded-2xl p-5" style={{ animation: `fadeInUp 0.35s ease-out ${qi * 0.03}s both` }}>
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <div className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-                        style={{ background: "rgba(16,185,129,0.15)", color: "#34d399" }}>{qi + 1}</div>
+                <div key={q.id} className="brutal-card p-5 bg-white relative overflow-hidden" style={{ borderColor: "#000" }}>
+                  <div className="absolute top-0 right-0 w-4 h-full" style={{ background: isOdd ? "var(--brand-blue)" : "var(--brand-yellow)" }}></div>
+
+                  <div className="flex items-start justify-between gap-3 mb-4 pr-6">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-black border-[3px] border-black bg-slate-100">{qi + 1}</div>
                       <input type="text" value={q.text} onChange={(e) => updateQuestionText(q.id, e.target.value)}
-                        className="text-input flex-1 text-sm" placeholder={`Pertanyaan ${qi + 1}`} />
+                        className="text-input flex-1 text-sm font-bold border-0 shadow-none focus:bg-slate-100 p-2" placeholder={`Pertanyaan ${qi + 1}`} />
                     </div>
                     {questions.length > 1 && (
-                      <button onClick={() => removeQuestion(q.id)} className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors"
-                        style={{ color: "#475569", background: "rgba(239,68,68,0.06)" }}
-                        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#ef4444"; (e.currentTarget as HTMLButtonElement).style.background = "rgba(239,68,68,0.15)"; }}
-                        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#475569"; (e.currentTarget as HTMLButtonElement).style.background = "rgba(239,68,68,0.06)"; }}>
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                      <button onClick={() => removeQuestion(q.id)} className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-white border-2 border-black hover:bg-[var(--brand-pink)] hover:text-white transition-colors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
                       </button>
                     )}
                   </div>
+
                   {/* Score inputs per scale value */}
-                  <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${scaleType}, 1fr)` }}>
+                  <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${scaleType}, 1fr)` }}>
                     {scales.map((s) => {
                       const count = q.scores[s.value - 1] ?? 0;
                       return (
                         <div key={s.value} className="text-center">
-                          <div className="text-[10px] mb-1 font-semibold truncate" style={{ color: "#475569" }}>{s.label}</div>
+                          <div className="text-[10px] mb-2 font-black uppercase truncate border-b-2 border-black pb-1">{s.label}</div>
                           <input type="number" min={0} max={respondentCount} value={count}
                             onChange={(e) => updateScore(qi, s.value, parseInt(e.target.value) || 0)}
-                            className="number-input w-full text-center" style={{ fontSize: "0.875rem" }} />
+                            className="text-input w-full text-center font-bold" />
                         </div>
                       );
                     })}
                   </div>
+
                   {/* Per-question stats */}
-                  <div className="flex items-center justify-between mt-3 text-[10px]" style={{ color: "#334155" }}>
-                    <span>Total: <strong style={{ color: "#6ee7b7" }}>{qTotal}</strong> / {qMax}{totalResp !== respondentCount && totalResp > 0 && <span style={{ color: "#f59e0b" }}> ⚠ responden: {totalResp}/{respondentCount}</span>}</span>
-                    <span className="font-bold" style={{ color: getInterpretation(qPct).color }}>{qPct.toFixed(1)}%</span>
+                  <div className="flex items-center justify-between mt-4 pt-3 border-t-2 border-black text-xs font-black uppercase">
+                    <span>
+                      Total: <span className="bg-[var(--brand-mint)] px-2 border-2 border-black">{qTotal}</span> / {qMax}
+                      {totalResp !== respondentCount && totalResp > 0 && <span className="ml-2 bg-[var(--brand-pink)] px-1 text-white border-2 border-black">⚠ {totalResp}/{respondentCount} resp</span>}
+                    </span>
+                    <span className="px-2 py-1 border-2 border-black bg-[var(--brand-yellow)]">{qPct.toFixed(1)}%</span>
                   </div>
                 </div>
               );
             })}
 
             <button onClick={addQuestion}
-              className="w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200"
-              style={{ background: "rgba(16,185,129,0.07)", border: "1px dashed rgba(16,185,129,0.3)", color: "#34d399" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(16,185,129,0.13)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(16,185,129,0.07)"; }}>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+              className="w-full py-4 rounded-xl text-sm font-black uppercase flex items-center justify-center gap-2 border-[3px] border-dashed border-black bg-slate-50 hover:bg-slate-100 transition-colors">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
               Tambah Pertanyaan
             </button>
           </div>
 
           {/* Right: Results */}
-          <aside className="w-full lg:w-72 xl:w-80 flex-shrink-0 lg:sticky lg:top-4 space-y-4">
-            <div className="glass-card rounded-2xl p-5">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-center mb-4" style={{ color: "#475569" }}>Kelayakan Sistem</h2>
+          <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-4 space-y-6">
+            <div className="brutal-card p-6 bg-white">
+              <h2 className="text-sm font-black uppercase tracking-wider text-center mb-6 border-b-4 border-black pb-1 inline-block w-full">Kelayakan Sistem</h2>
 
               {stats.hasData ? (
                 <>
-                  <div className="w-40 h-40 mx-auto mb-4">
+                  <div className="w-48 h-48 mx-auto mb-6">
                     <PercentRing pct={stats.grandPct} />
                   </div>
+
                   {/* Interpretation */}
                   {(() => { const info = getInterpretation(stats.grandPct); return (
-                    <div className="p-4 rounded-xl text-center mb-4" style={{ background: info.bgColor, border: `1px solid ${info.borderColor}` }}>
-                      <div className="text-xl mb-1">{info.emoji}</div>
-                      <div className="font-bold text-sm" style={{ color: info.color }}>{info.label}</div>
-                      <div className="text-xs mt-1" style={{ color: "#64748b" }}>{info.desc}</div>
+                    <div className="p-4 rounded-xl text-center mb-6 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform -rotate-1" style={{ background: info.bgColor }}>
+                      <div className="text-3xl mb-2">{info.emoji}</div>
+                      <div className="font-black text-lg uppercase mb-1">{info.label}</div>
+                      <div className="text-xs font-bold">{info.desc}</div>
                     </div>
                   ); })()}
+
                   {/* Stats */}
-                  <div className="grid grid-cols-3 gap-2 mb-4">
+                  <div className="grid grid-cols-3 gap-2 mb-6">
                     {[
                       { label: "Total Skor", value: String(stats.grandTotal) },
                       { label: "Skor Maks", value: String(stats.grandMax) },
                       { label: "Responden", value: String(respondentCount) },
                     ].map((s) => (
-                      <div key={s.label} className="text-center p-2 rounded-xl" style={{ background: "rgba(16,185,129,0.05)", border: "1px solid rgba(16,185,129,0.12)" }}>
-                        <div className="text-sm font-black" style={{ color: "#34d399" }}>{s.value}</div>
-                        <div className="text-[9px] mt-0.5" style={{ color: "#475569" }}>{s.label}</div>
+                      <div key={s.label} className="text-center p-2 border-[3px] border-black bg-[var(--brand-mint)] transform rotate-1">
+                        <div className="text-base font-black">{s.value}</div>
+                        <div className="text-[9px] mt-1 font-bold uppercase">{s.label}</div>
                       </div>
                     ))}
                   </div>
+
                   {/* Prose */}
-                  <div className="p-3 rounded-xl text-xs leading-relaxed" style={{ background: "rgba(16,185,129,0.05)", border: "1px solid rgba(16,185,129,0.15)", color: "#94a3b8" }}>
-                    Persentase kelayakan dihitung: <strong style={{ color: "#f1f5f9" }}>(Total Skor / Skor Maksimal) × 100%</strong> = ({stats.grandTotal} / {stats.grandMax}) × 100% = <strong style={{ color: "#10b981" }}>{stats.grandPct.toFixed(2)}%</strong>.
+                  <div className="p-4 border-2 border-black bg-slate-100 text-xs font-bold leading-relaxed">
+                    Persentase = <span className="bg-white px-1 border border-black">(Total / Maks) × 100%</span><br />
+                    = ({stats.grandTotal} / {stats.grandMax}) × 100% = <span className="bg-[var(--brand-yellow)] px-1 border border-black">{stats.grandPct.toFixed(2)}%</span>
                   </div>
-                  <button onClick={resetAll} className="btn-ghost w-full py-2 text-xs mt-3">Reset Semua</button>
+
+                  <button onClick={resetAll} className="btn-ghost w-full py-3 text-xs uppercase font-black mt-4 border-[3px] border-black">Reset Semua</button>
                 </>
               ) : (
-                <div className="text-center py-8">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center animate-pulseRing"
-                    style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)" }}>
-                    <span className="font-black text-3xl" style={{ color: "rgba(16,185,129,0.4)" }}>%</span>
+                <div className="text-center py-10">
+                  <div className="w-24 h-24 mx-auto mb-6 rounded-full border-4 border-black border-dashed flex items-center justify-center bg-slate-100 transform rotate-12">
+                    <span className="font-black text-4xl">%</span>
                   </div>
-                  <p className="text-xs" style={{ color: "#334155" }}>Isi jumlah jawaban per skala<br />untuk melihat kelayakan</p>
+                  <p className="text-sm font-bold">Isi jumlah jawaban per skala untuk melihat kelayakan</p>
                 </div>
               )}
             </div>
 
-            <div className="ad-placeholder rounded-2xl" style={{ height: "120px" }} role="complementary" aria-label="Ad Space"><span>Advertisement · 300 × 250</span></div>
-
             {/* Interpretation scale */}
-            <div className="glass-card rounded-2xl p-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#475569" }}>Skala Interpretasi</h3>
-              <div className="space-y-2">
+            <div className="brutal-card p-5 bg-[var(--brand-lilac)]">
+              <h3 className="text-sm font-black uppercase mb-4 border-b-2 border-black pb-1">Skala Interpretasi</h3>
+              <div className="space-y-3 font-bold text-sm">
                 {[
-                  { range: "81% – 100%", label: "Sangat Layak", color: "#10b981" },
-                  { range: "61% – 80%", label: "Layak", color: "#6366f1" },
-                  { range: "41% – 60%", label: "Cukup Layak", color: "#f59e0b" },
-                  { range: "21% – 40%", label: "Tidak Layak", color: "#ef4444" },
-                  { range: "0% – 20%", label: "Sangat Tidak Layak", color: "#dc2626" },
+                  { range: "81% – 100%", label: "Sangat Layak" },
+                  { range: "61% – 80%", label: "Layak" },
+                  { range: "41% – 60%", label: "Cukup Layak" },
+                  { range: "21% – 40%", label: "Tidak Layak" },
+                  { range: "0% – 20%", label: "Sangat Tidak Layak" },
                 ].map((item) => (
-                  <div key={item.label} className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: item.color }} />
-                      <span style={{ color: "#475569" }}>{item.range}</span>
-                    </div>
-                    <span style={{ color: "#94a3b8" }}>{item.label}</span>
+                  <div key={item.label} className="flex items-center justify-between">
+                    <span className="bg-white border-2 border-black px-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">{item.range}</span>
+                    <span className="uppercase text-xs">{item.label}</span>
                   </div>
                 ))}
               </div>
@@ -506,8 +487,9 @@ export default function UatCalculator() {
         </div>
       </main>
 
-      <div className="ad-placeholder w-full" style={{ height: "90px" }} role="complementary" aria-label="Ad Space Footer"><span>Advertisement · 728 × 90</span></div>
-      <footer className="relative z-10 text-center py-4 text-xs" style={{ color: "#1e293b" }}>© 2025 AcademicTools · Kalkulator UAT gratis untuk mahasiswa Indonesia</footer>
+      <div className="p-4 flex justify-center mt-8">
+      </div>
+      <footer className="relative z-10 text-center py-6 font-bold text-sm border-t-[3px] border-black mt-4 bg-white">© 2025 AcademicTools</footer>
     </div>
   );
 }

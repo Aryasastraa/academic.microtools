@@ -3,28 +3,28 @@ import { Suspense } from "react";
 import TargetIpkCalculator from "./TargetIpkCalculator";
 
 export const metadata: Metadata = {
-  title: "Kalkulator Target IPK — Simulasi Nilai Kelulusan",
+  title: "Kalkulator Target IPK Kelulusan",
   description:
-    "Hitung nilai rata-rata yang dibutuhkan di sisa semester untuk mencapai target IPK kelulusan (misalnya Cumlaude 3.50).",
+    "Simulasikan rata-rata nilai yang Anda butuhkan di sisa SKS untuk mencapai target IPK kelulusan (misal: Cumlaude).",
   keywords: [
     "kalkulator target IPK",
-    "simulasi IPK",
-    "hitung IPK cumlaude",
-    "target kelulusan",
+    "simulasi IPK kelulusan",
+    "hitung sisa SKS",
+    "target cumlaude",
+    "perencanaan akademik",
   ],
   openGraph: {
-    title: "Kalkulator Target IPK Online",
-    description:
-      "Simulasikan berapa nilai rata-rata yang Anda butuhkan di sisa SKS untuk mencapai IPK target kelulusan Anda.",
+    title: "Kalkulator Target IPK Kelulusan",
+    description: "Simulasikan nilai rata-rata yang Anda butuhkan untuk mencapai target IPK kelulusan.",
   },
 };
 
-function TargetFallback() {
+function TargetIpkFallback() {
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: "#050818" }}>
+    <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
       <div className="text-center">
-        <div className="w-12 h-12 rounded-full border-2 animate-spin mx-auto mb-4"
-          style={{ borderColor: "rgba(236,72,153,0.5)", borderTopColor: "transparent" }} />
+        <div className="w-12 h-12 rounded-full border-[4px] border-black border-t-transparent animate-spin mx-auto mb-4" />
+        <p className="font-bold text-sm">Memuat kalkulator…</p>
       </div>
     </div>
   );
@@ -32,7 +32,7 @@ function TargetFallback() {
 
 export default function TargetIpkPage() {
   return (
-    <Suspense fallback={<TargetFallback />}>
+    <Suspense fallback={<TargetIpkFallback />}>
       <TargetIpkCalculator />
     </Suspense>
   );

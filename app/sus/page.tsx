@@ -22,16 +22,10 @@ export const metadata: Metadata = {
 
 function SusCalculatorFallback() {
   return (
-    <div
-      className="min-h-screen flex items-center justify-center"
-      style={{ background: "#050818" }}
-    >
+    <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
       <div className="text-center">
-        <div
-          className="w-12 h-12 rounded-full border-2 border-t-transparent animate-spin mx-auto mb-4"
-          style={{ borderColor: "rgba(99,102,241,0.5)", borderTopColor: "transparent" }}
-        />
-        <p style={{ color: "#64748b", fontSize: "0.875rem" }}>Memuat kalkulator…</p>
+        <div className="w-12 h-12 rounded-full border-[4px] border-black border-t-transparent animate-spin mx-auto mb-4" />
+        <p className="font-bold text-sm">Memuat kalkulator…</p>
       </div>
     </div>
   );

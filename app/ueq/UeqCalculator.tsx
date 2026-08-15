@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, useRef } from "react";
+import Link from "next/link";
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  UEQ Item definitions (standard 26 items, Indonesian)
@@ -49,12 +50,12 @@ const UEQ_ITEMS: UeqItem[] = [
 const SCALE_ORDER: ScaleName[] = ["Daya Tarik", "Kejelasan", "Efisiensi", "Ketepatan", "Stimulasi", "Kebaruan"];
 
 const SCALE_COLORS: Record<ScaleName, string> = {
-  "Daya Tarik": "#8b5cf6",
-  "Kejelasan":  "#6366f1",
-  "Efisiensi":  "#06b6d4",
-  "Ketepatan":  "#10b981",
-  "Stimulasi":  "#f59e0b",
-  "Kebaruan":   "#ec4899",
+  "Daya Tarik": "var(--brand-mint)",
+  "Kejelasan":  "var(--brand-blue)",
+  "Efisiensi":  "var(--brand-yellow)",
+  "Ketepatan":  "var(--brand-pink)",
+  "Stimulasi":  "var(--brand-orange)",
+  "Kebaruan":   "var(--brand-lilac)",
 };
 
 const SCALE_EN: Record<ScaleName, string> = {
@@ -74,23 +75,22 @@ interface BenchmarkInfo {
   label: string;
   color: string;
   bgColor: string;
-  borderColor: string;
 }
 
 function getBenchmark(mean: number): BenchmarkInfo {
-  if (mean >= 1.75) return { label: "Sangat Baik (Excellent)", color: "#10b981", bgColor: "rgba(16,185,129,0.1)", borderColor: "rgba(16,185,129,0.3)" };
-  if (mean >= 0.72) return { label: "Baik (Good)", color: "#6366f1", bgColor: "rgba(99,102,241,0.1)", borderColor: "rgba(99,102,241,0.3)" };
-  if (mean >= -0.7)  return { label: "Netral (Above Average)", color: "#f59e0b", bgColor: "rgba(245,158,11,0.1)", borderColor: "rgba(245,158,11,0.3)" };
-  if (mean >= -1.5)  return { label: "Buruk (Below Average)", color: "#ef4444", bgColor: "rgba(239,68,68,0.1)", borderColor: "rgba(239,68,68,0.3)" };
-  return { label: "Sangat Buruk (Bad)", color: "#dc2626", bgColor: "rgba(220,38,38,0.1)", borderColor: "rgba(220,38,38,0.3)" };
+  if (mean >= 1.75) return { label: "Sangat Baik", color: "#000", bgColor: "var(--brand-mint)" };
+  if (mean >= 0.72) return { label: "Baik", color: "#000", bgColor: "var(--brand-blue)" };
+  if (mean >= -0.7)  return { label: "Netral", color: "#000", bgColor: "var(--brand-yellow)" };
+  if (mean >= -1.5)  return { label: "Buruk", color: "#000", bgColor: "var(--brand-orange)" };
+  return { label: "Sangat Buruk", color: "#000", bgColor: "var(--brand-pink)" };
 }
 
-function getOverallBenchmark(mean: number): { label: string; emoji: string; color: string; bgColor: string; borderColor: string; desc: string } {
-  if (mean >= 1.75) return { label: "Excellent", emoji: "🌟", color: "#10b981", bgColor: "rgba(16,185,129,0.12)", borderColor: "rgba(16,185,129,0.3)", desc: "Pengalaman pengguna sangat baik di seluruh aspek." };
-  if (mean >= 0.72) return { label: "Good", emoji: "👍", color: "#6366f1", bgColor: "rgba(99,102,241,0.12)", borderColor: "rgba(99,102,241,0.3)", desc: "Pengalaman pengguna baik, di atas rata-rata benchmark." };
-  if (mean >= -0.7)  return { label: "Neutral", emoji: "✅", color: "#f59e0b", bgColor: "rgba(245,158,11,0.12)", borderColor: "rgba(245,158,11,0.3)", desc: "Pengalaman pengguna cukup — ada ruang perbaikan." };
-  if (mean >= -1.5)  return { label: "Below Average", emoji: "⚠️", color: "#ef4444", bgColor: "rgba(239,68,68,0.12)", borderColor: "rgba(239,68,68,0.3)", desc: "Pengalaman pengguna kurang baik, perlu evaluasi." };
-  return { label: "Bad", emoji: "❌", color: "#dc2626", bgColor: "rgba(220,38,38,0.12)", borderColor: "rgba(220,38,38,0.3)", desc: "Pengalaman pengguna sangat buruk." };
+function getOverallBenchmark(mean: number): { label: string; emoji: string; color: string; bgColor: string; desc: string } {
+  if (mean >= 1.75) return { label: "Excellent", emoji: "🌟", color: "#000", bgColor: "var(--brand-mint)", desc: "Pengalaman pengguna sangat baik." };
+  if (mean >= 0.72) return { label: "Good", emoji: "👍", color: "#000", bgColor: "var(--brand-blue)", desc: "Pengalaman pengguna baik." };
+  if (mean >= -0.7)  return { label: "Neutral", emoji: "✅", color: "#000", bgColor: "var(--brand-yellow)", desc: "Pengalaman pengguna cukup, ada ruang perbaikan." };
+  if (mean >= -1.5)  return { label: "Below Average", emoji: "⚠️", color: "#000", bgColor: "var(--brand-orange)", desc: "Pengalaman pengguna kurang baik, perlu evaluasi." };
+  return { label: "Bad", emoji: "❌", color: "#000", bgColor: "var(--brand-pink)", desc: "Pengalaman pengguna sangat buruk." };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -101,7 +101,7 @@ function transformItem(rawValue: number, reversed: boolean): number {
   return reversed ? 4 - rawValue : rawValue - 4;
 }
 
-// CSV parser (same lightweight parser used across all tools)
+// CSV parser
 function parseCSVRows(text: string): string[][] {
   return text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n").filter((l) => l.trim()).map((line) => {
     const cells: string[] = [];
@@ -135,13 +135,13 @@ function UeqBarChart({ scaleMeans }: { scaleMeans: Record<ScaleName, number> }) 
   const zeroY = toY(0);
 
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="w-full" role="img" aria-label="UEQ bar chart">
-      <rect width={w} height={h} fill="#050818" rx="12" />
+    <svg viewBox={`0 0 ${w} ${h}`} className="w-full bg-white border-[3px] border-black rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform -rotate-1 mb-4" role="img" aria-label="UEQ bar chart">
+      <rect width={w} height={h} fill="none" />
       {/* Grid lines */}
       {[-3, -2, -1, 0, 1, 2, 3].map((v) => (
         <g key={v}>
-          <line x1={ml} y1={toY(v)} x2={ml + plotW} y2={toY(v)} stroke={v === 0 ? "rgba(148,163,184,0.3)" : "rgba(148,163,184,0.08)"} strokeWidth={v === 0 ? 1 : 0.5} />
-          <text x={ml - 6} y={toY(v) + 3} textAnchor="end" fill="rgba(148,163,184,0.5)" fontSize="9" fontFamily="Inter, sans-serif">{v}</text>
+          <line x1={ml} y1={toY(v)} x2={ml + plotW} y2={toY(v)} stroke={v === 0 ? "#000" : "#cbd5e1"} strokeWidth={v === 0 ? 2 : 1} strokeDasharray={v === 0 ? "none" : "4 4"} />
+          <text x={ml - 10} y={toY(v) + 4} textAnchor="end" fill="#000" fontSize="11" fontWeight="800" fontFamily="Inter, sans-serif">{v}</text>
         </g>
       ))}
       {/* Bars */}
@@ -153,13 +153,13 @@ function UeqBarChart({ scaleMeans }: { scaleMeans: Record<ScaleName, number> }) 
         const color = SCALE_COLORS[scale];
         return (
           <g key={scale}>
-            <rect x={x} y={barY} width={barW} height={barH} rx={4} fill={color} opacity={0.85} />
+            <rect x={x} y={barY} width={barW} height={barH} rx={0} fill={color} stroke="#000" strokeWidth="2" />
             {/* Value label */}
-            <text x={x + barW / 2} y={val >= 0 ? barY - 5 : barY + barH + 11} textAnchor="middle" fill={color} fontSize="9" fontWeight="800" fontFamily="Inter, sans-serif">
+            <text x={x + barW / 2} y={val >= 0 ? barY - 5 : barY + barH + 12} textAnchor="middle" fill="#000" fontSize="10" fontWeight="900" fontFamily="Inter, sans-serif">
               {val.toFixed(2)}
             </text>
             {/* Scale label */}
-            <text x={x + barW / 2} y={h - 6} textAnchor="middle" fill="rgba(148,163,184,0.6)" fontSize="7" fontFamily="Inter, sans-serif">
+            <text x={x + barW / 2} y={h - 8} textAnchor="middle" fill="#000" fontSize="9" fontWeight="800" fontFamily="Inter, sans-serif" transform={`rotate(-45, ${x + barW / 2}, ${h - 8})`}>
               {scale.split(" ")[scale.split(" ").length > 1 ? 1 : 0]}
             </text>
           </g>
@@ -296,7 +296,7 @@ export default function UeqCalculator() {
 
   // ── Render ────────────────────────────────────
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#050818" }}
+    <div className="min-h-screen flex flex-col"
       onDragOver={(e) => { if (e.dataTransfer.types.includes("Files")) { e.preventDefault(); setIsDragOver(true); } }}
       onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setIsDragOver(false); }}
       onDrop={handleDrop}>
@@ -305,130 +305,124 @@ export default function UeqCalculator() {
 
       {/* Drag overlay */}
       {isDragOver && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(5,8,24,0.92)", backdropFilter: "blur(12px)" }}>
-          <div className="text-center px-16 py-12 rounded-3xl" style={{ border: "2px dashed rgba(6,182,212,0.7)", background: "rgba(6,182,212,0.08)" }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-md">
+          <div className="text-center px-16 py-12 brutal-card bg-[var(--brand-mint)] transform rotate-2">
             <div className="text-7xl mb-5">🎯</div>
-            <h2 className="text-2xl font-extrabold mb-2" style={{ color: "#f1f5f9" }}>Lepaskan file CSV di sini</h2>
-            <p className="text-sm" style={{ color: "#94a3b8" }}>Data UEQ akan otomatis diproses</p>
+            <h2 className="text-3xl font-black mb-2 uppercase">Lepaskan file CSV di sini</h2>
+            <p className="text-sm font-bold">Data UEQ akan otomatis diproses</p>
           </div>
         </div>
       )}
 
-      {/* Ambient */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl animate-float" style={{ background: "rgba(6,182,212,0.07)" }} />
-        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 rounded-full blur-3xl animate-float-2" style={{ background: "rgba(139,92,246,0.06)" }} />
+      {/* Header Ad */}
+      <div className="p-4 flex justify-center mt-2">
       </div>
-
-      <div className="ad-placeholder w-full" style={{ height: "90px" }} role="complementary"><span>Advertisement · 728 × 90</span></div>
 
       {/* Nav */}
       <nav className="relative z-10 flex items-center justify-between px-5 py-4 max-w-5xl mx-auto w-full">
-        <a href="/" className="flex items-center gap-2 text-sm transition-colors" style={{ color: "#64748b" }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#f1f5f9")}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#64748b")}>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-          AcademicTools
-        </a>
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #06b6d4, #8b5cf6)" }}>
-          <span className="text-white text-xs font-black select-none">A</span>
+        <Link href="/" className="flex items-center gap-2 font-black uppercase text-sm border-2 border-transparent hover:border-black hover:bg-black hover:text-white px-3 py-1 rounded transition-all">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+          Kembali
+        </Link>
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center border-[3px] border-black bg-[var(--brand-lilac)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform rotate-3">
+          <span className="text-black text-sm font-black select-none">A</span>
         </div>
       </nav>
 
       <main className="relative z-10 max-w-5xl mx-auto w-full px-4 pb-20 flex-1">
-        <header className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-4"
-            style={{ background: "rgba(6,182,212,0.1)", border: "1px solid rgba(6,182,212,0.22)", color: "#22d3ee" }}>
-            User Experience Questionnaire · 26 Item · 6 Skala
+        <header className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase mb-4 brutal-badge bg-[var(--brand-lilac)]">
+            User Experience Questionnaire · 26 Item
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 tracking-tight" style={{ color: "#f1f5f9" }}>
-            Kalkulator <span style={{ background: "linear-gradient(135deg, #06b6d4, #8b5cf6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>UEQ</span>
+          <h1 className="text-4xl sm:text-5xl font-black mb-3 tracking-tight uppercase">
+            Kalkulator UEQ
           </h1>
-          <p className="max-w-lg mx-auto text-sm sm:text-base leading-relaxed" style={{ color: "#64748b" }}>
-            Isi 26 pasangan kata sifat atau <strong style={{ color: "#94a3b8" }}>import CSV</strong>. Skor dihitung otomatis.
+          <p className="max-w-lg mx-auto text-base font-bold leading-relaxed">
+            Isi 26 pasangan kata sifat atau <span className="bg-[var(--brand-yellow)] px-1 border-2 border-black font-black transform -rotate-1 inline-block">import CSV</span>. Skor dihitung otomatis.
           </p>
         </header>
 
         {/* Import zone */}
-        <div className="mb-6">
+        <div className="mb-8">
           {importError && (
-            <div className="glass-card rounded-2xl p-4 mb-3" style={{ borderColor: "rgba(239,68,68,0.35)", background: "rgba(239,68,68,0.05)" }}>
+            <div className="brutal-card p-4 mb-4 bg-[var(--brand-pink)]">
               <div className="flex items-start gap-3">
-                <span className="text-lg flex-shrink-0">❌</span>
-                <p className="text-xs leading-relaxed whitespace-pre-line" style={{ color: "#94a3b8" }}>{importError}</p>
-                <button onClick={() => setImportError(null)} className="btn-ghost ml-auto text-xs px-2 py-1 rounded-lg">✕</button>
+                <span className="text-3xl flex-shrink-0">❌</span>
+                <div className="flex-1">
+                  <p className="text-sm font-black mb-1">Gagal membaca file</p>
+                  <p className="text-xs font-bold leading-relaxed whitespace-pre-line">{importError}</p>
+                </div>
+                <button onClick={() => setImportError(null)} className="btn-ghost px-3 py-1 bg-white">✕</button>
               </div>
             </div>
           )}
           {importInfo && (
-            <div className="glass-card rounded-2xl p-3 mb-3" style={{ borderColor: "rgba(16,185,129,0.35)", background: "rgba(16,185,129,0.05)" }}>
-              <div className="flex items-center gap-2"><span>✅</span><p className="text-xs" style={{ color: "#34d399" }}>{importInfo}</p>
-                <button onClick={() => { setImportInfo(null); }} className="btn-ghost ml-auto text-xs px-2 py-1 rounded-lg">✕</button>
+            <div className="brutal-card p-4 mb-4 bg-[var(--brand-mint)]">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">✅</span>
+                <p className="text-sm font-black flex-1">{importInfo}</p>
+                <button onClick={() => { setImportInfo(null); }} className="btn-ghost px-3 py-1 bg-white">✕</button>
               </div>
             </div>
           )}
           <button onClick={() => fileInputRef.current?.click()}
-            className="w-full rounded-2xl py-3 px-6 text-left transition-all duration-200 flex items-center gap-4"
-            style={{ background: "rgba(6,182,212,0.05)", border: "1.5px dashed rgba(6,182,212,0.28)" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(6,182,212,0.09)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(6,182,212,0.05)"; }}>
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "rgba(6,182,212,0.12)" }}>
-              <svg className="w-4 h-4" fill="none" stroke="#22d3ee" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+            className="w-full btn-ghost border-dashed flex items-center justify-center gap-4 py-6 bg-slate-50"
+          >
+            <div className="w-12 h-12 rounded flex items-center justify-center border-[3px] border-black bg-[var(--brand-blue)] transform -rotate-3">
+              <span className="text-2xl font-black text-white">+</span>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold" style={{ color: "#67e8f9" }}>Import CSV dari Google Forms</p>
-              <p className="text-xs mt-0.5" style={{ color: "#475569" }}>Drag &amp; drop atau klik · 26 kolom skala 1–7</p>
+            <div className="text-left">
+              <p className="text-base font-black uppercase">Import CSV dari Google Forms</p>
+              <p className="text-xs font-bold mt-1">Drag &amp; drop atau klik · 26 kolom skala 1–7</p>
             </div>
           </button>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Left: Items */}
-          <div className="flex-1 min-w-0 space-y-2.5">
+          <div className="flex-1 min-w-0 space-y-4">
             {UEQ_ITEMS.map((item, qi) => {
               const answered = answers[qi] !== null;
               const color = SCALE_COLORS[item.scale];
               return (
                 <div key={qi} id={`ueq-item-${qi + 1}`}
-                  className="glass-card rounded-xl p-4 transition-all duration-200"
-                  style={{ animation: `fadeInUp 0.3s ease-out ${qi * 0.02}s both`, borderColor: answered ? `${color}55` : undefined }}>
+                  className="brutal-card p-5 bg-white relative overflow-hidden"
+                  style={{ borderColor: "#000" }}>
+
+                  <div className="absolute top-0 right-0 w-4 h-full" style={{ background: color }}></div>
 
                   {/* Scale & number */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center"
-                      style={{ background: answered ? color : "rgba(30,41,100,0.7)", color: answered ? "white" : "#475569" }}>{qi + 1}</span>
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                      style={{ background: `${color}18`, color, border: `1px solid ${color}30` }}>{item.scale}</span>
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className={`w-8 h-8 flex-shrink-0 border-[3px] border-black rounded flex items-center justify-center text-sm font-black ${answered ? 'bg-black text-white' : 'bg-slate-100 text-black'}`}>
+                      {qi + 1}
+                    </span>
+                    <span className="text-[10px] font-black uppercase px-2 py-1 border-2 border-black" style={{ background: color }}>
+                      {item.scale}
+                    </span>
                   </div>
 
                   {/* Semantic differential slider */}
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-right w-28 sm:w-32 flex-shrink-0 font-medium"
-                      style={{ color: item.reversed ? "#6ee7b7" : "#f87171", fontSize: "11px" }}>
+                    <span className={`text-xs text-right w-24 sm:w-28 flex-shrink-0 font-black uppercase`}
+                      style={{ color: "#000" }}>
                       {item.left}
                     </span>
 
-                    <div className="flex gap-1 flex-1 justify-center">
+                    <div className="flex gap-1 sm:gap-2 flex-1 justify-center">
                       {[1, 2, 3, 4, 5, 6, 7].map((v) => {
                         const selected = answers[qi] === v;
                         return (
                           <button key={v} onClick={() => handleAnswer(qi, v)}
-                            className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center font-bold text-xs transition-all duration-150"
-                            style={{
-                              background: selected ? color : "rgba(15,23,70,0.5)",
-                              border: `1px solid ${selected ? "transparent" : "rgba(99,102,241,0.15)"}`,
-                              color: selected ? "white" : "#475569",
-                              boxShadow: selected ? `0 3px 12px ${color}55` : "none",
-                              transform: selected ? "scale(1.1)" : "scale(1)",
-                            }}>
+                            className={`w-7 h-7 sm:w-10 sm:h-10 rounded border-[3px] border-black flex items-center justify-center font-black text-sm sm:text-base transition-transform ${selected ? 'bg-black text-white transform -translate-y-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : 'bg-white hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'}`}
+                          >
                             {v}
                           </button>
                         );
                       })}
                     </div>
 
-                    <span className="text-xs text-left w-28 sm:w-32 flex-shrink-0 font-medium"
-                      style={{ color: item.reversed ? "#f87171" : "#6ee7b7", fontSize: "11px" }}>
+                    <span className={`text-xs text-left w-24 sm:w-28 flex-shrink-0 font-black uppercase`}
+                      style={{ color: "#000" }}>
                       {item.right}
                     </span>
                   </div>
@@ -438,21 +432,21 @@ export default function UeqCalculator() {
           </div>
 
           {/* Right: Results */}
-          <aside className="w-full lg:w-80 xl:w-96 flex-shrink-0 lg:sticky lg:top-4 space-y-4">
+          <aside className="w-full lg:w-80 xl:w-96 flex-shrink-0 lg:sticky lg:top-4 space-y-6">
             {/* Progress */}
-            <div className="glass-card rounded-2xl p-5">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#475569" }}>Progress</span>
-                <span className="text-sm font-bold" style={{ color: "#22d3ee" }}>{answeredCount} / 26</span>
+            <div className="brutal-card p-5 bg-white">
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm font-black uppercase">Progress</span>
+                <span className="text-lg font-black bg-black text-white px-2 py-1 transform rotate-2">{answeredCount} / 26</span>
               </div>
-              <div className="progress-track" style={{ height: "6px" }}>
-                <div className="progress-fill" style={{ width: `${(answeredCount / 26) * 100}%`, background: "linear-gradient(90deg, #06b6d4, #8b5cf6)" }} />
+              <div className="progress-track" style={{ height: "12px", border: "2px solid #000" }}>
+                <div className="progress-fill" style={{ width: `${(answeredCount / 26) * 100}%`, background: "var(--brand-lilac)" }} />
               </div>
             </div>
 
             {/* Results */}
-            <div className="glass-card rounded-2xl p-5">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-center mb-4" style={{ color: "#475569" }}>Hasil UEQ</h2>
+            <div className="brutal-card p-6 bg-white">
+              <h2 className="text-sm font-black uppercase tracking-wider text-center mb-6 border-b-4 border-black pb-1 inline-block w-full">Hasil UEQ</h2>
 
               {isComplete && results ? (
                 <>
@@ -461,32 +455,31 @@ export default function UeqCalculator() {
 
                   {/* Overall interpretation */}
                   {(() => { const info = getOverallBenchmark(results.overall); return (
-                    <div className="mt-4 p-4 rounded-xl text-center" style={{ background: info.bgColor, border: `1px solid ${info.borderColor}` }}>
-                      <div className="text-xl mb-1">{info.emoji}</div>
-                      <div className="font-bold text-sm" style={{ color: info.color }}>{info.label}</div>
-                      <div className="text-xs mt-1" style={{ color: "#64748b" }}>{info.desc}</div>
-                      <div className="text-lg font-black mt-2" style={{ color: info.color }}>{results.overall.toFixed(2)}</div>
+                    <div className="mt-6 p-4 border-[3px] border-black text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform -rotate-1 mb-6" style={{ background: info.bgColor }}>
+                      <div className="text-3xl mb-2">{info.emoji}</div>
+                      <div className="font-black text-lg uppercase mb-1">{info.label}</div>
+                      <div className="text-xs font-bold leading-relaxed">{info.desc}</div>
+                      <div className="text-2xl font-black mt-3 bg-white border-2 border-black px-2 py-1 inline-block">{results.overall.toFixed(2)}</div>
                     </div>
                   ); })()}
 
                   {/* Per-scale table */}
-                  <div className="mt-4 space-y-2">
+                  <div className="mt-6 space-y-3">
                     {SCALE_ORDER.map((scale) => {
                       const mean = results.scaleMeans[scale];
                       const bm = getBenchmark(mean);
                       const color = SCALE_COLORS[scale];
                       return (
-                        <div key={scale} className="flex items-center justify-between p-2.5 rounded-xl" style={{ background: `${color}0a`, border: `1px solid ${color}20` }}>
-                          <div className="flex items-center gap-2">
-                            <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: color }} />
+                        <div key={scale} className="flex items-center justify-between p-3 border-2 border-black" style={{ background: color }}>
+                          <div className="flex items-center gap-3">
                             <div>
-                              <div className="text-xs font-bold" style={{ color }}>{scale}</div>
-                              <div className="text-[10px]" style={{ color: "#475569" }}>{SCALE_EN[scale]}</div>
+                              <div className="text-xs font-black uppercase">{scale}</div>
+                              <div className="text-[10px] font-bold uppercase bg-white px-1 mt-1 inline-block border border-black">{SCALE_EN[scale]}</div>
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-sm font-black" style={{ color }}>{mean.toFixed(2)}</div>
-                            <div className="text-[10px]" style={{ color: bm.color }}>{bm.label.split("(")[0].trim()}</div>
+                            <div className="text-lg font-black bg-white px-1 border-2 border-black mb-1 inline-block shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">{mean.toFixed(2)}</div>
+                            <div className="text-[10px] font-black uppercase text-center">{bm.label}</div>
                           </div>
                         </div>
                       );
@@ -494,69 +487,62 @@ export default function UeqCalculator() {
                   </div>
 
                   {/* Pragmatic / Hedonic */}
-                  <div className="mt-4 grid grid-cols-2 gap-2">
-                    <div className="p-3 rounded-xl text-center" style={{ background: "rgba(99,102,241,0.07)", border: "1px solid rgba(99,102,241,0.15)" }}>
-                      <div className="text-lg font-black" style={{ color: "#818cf8" }}>{results.pragmatic.toFixed(2)}</div>
-                      <div className="text-[10px] mt-0.5" style={{ color: "#475569" }}>Pragmatic Quality</div>
+                  <div className="mt-6 grid grid-cols-2 gap-3">
+                    <div className="p-3 text-center border-[3px] border-black bg-[var(--brand-mint)] transform -rotate-1">
+                      <div className="text-2xl font-black bg-white border-2 border-black inline-block px-2 mb-2">{results.pragmatic.toFixed(2)}</div>
+                      <div className="text-[10px] font-black uppercase">Pragmatic<br/>Quality</div>
                     </div>
-                    <div className="p-3 rounded-xl text-center" style={{ background: "rgba(236,72,153,0.07)", border: "1px solid rgba(236,72,153,0.15)" }}>
-                      <div className="text-lg font-black" style={{ color: "#f472b6" }}>{results.hedonic.toFixed(2)}</div>
-                      <div className="text-[10px] mt-0.5" style={{ color: "#475569" }}>Hedonic Quality</div>
+                    <div className="p-3 text-center border-[3px] border-black bg-[var(--brand-pink)] transform rotate-1">
+                      <div className="text-2xl font-black bg-white border-2 border-black inline-block px-2 mb-2">{results.hedonic.toFixed(2)}</div>
+                      <div className="text-[10px] font-black uppercase">Hedonic<br/>Quality</div>
                     </div>
                   </div>
 
                   {/* Actions */}
-                  <div className="mt-4 space-y-2">
-                    <button onClick={shareResult} className="btn-primary w-full py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
-                      style={{ background: "linear-gradient(135deg, #06b6d4, #8b5cf6)" }}>
-                      {copied ? (
-                        <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Link Tersalin!</>
-                      ) : (
-                        <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>Salin Link Hasil</>
-                      )}
+                  <div className="mt-6 space-y-3">
+                    <button onClick={shareResult} className="btn-primary w-full" style={{ background: "var(--brand-blue)" }}>
+                      <div className="flex items-center justify-center gap-2 uppercase">
+                        {copied ? "LINK TERSALIN!" : "SALIN LINK HASIL"}
+                      </div>
                     </button>
-                    <button onClick={resetAll} className="btn-ghost w-full py-2 text-xs">Reset semua jawaban</button>
+                    <button onClick={resetAll} className="btn-ghost w-full uppercase text-xs font-black">Reset Semua</button>
                   </div>
                 </>
               ) : (
-                <div className="text-center py-8">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center animate-pulseRing"
-                    style={{ background: "rgba(6,182,212,0.08)", border: "1px solid rgba(6,182,212,0.2)" }}>
-                    <span className="font-black text-3xl" style={{ color: "rgba(6,182,212,0.4)" }}>?</span>
+                <div className="text-center py-10">
+                  <div className="w-24 h-24 mx-auto mb-6 rounded-full border-4 border-black border-dashed flex items-center justify-center bg-slate-100 transform rotate-12">
+                    <span className="font-black text-4xl">?</span>
                   </div>
-                  <p className="text-xs" style={{ color: "#334155" }}>Isi semua 26 item atau import CSV<br />untuk melihat hasil UEQ</p>
+                  <p className="text-sm font-bold">Isi semua 26 item atau import CSV untuk melihat hasil UEQ</p>
                 </div>
               )}
             </div>
 
-            <div className="ad-placeholder rounded-2xl" style={{ height: "120px" }} role="complementary"><span>Advertisement · 300 × 250</span></div>
-
             {/* UEQ Scale Reference */}
-            <div className="glass-card rounded-2xl p-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#475569" }}>Skala UEQ</h3>
-              <div className="space-y-1.5">
+            <div className="brutal-card p-5 bg-[var(--brand-yellow)]">
+              <h3 className="text-sm font-black uppercase mb-4 border-b-2 border-black pb-1">Skala UEQ</h3>
+              <div className="space-y-3 font-bold text-sm">
                 {SCALE_ORDER.map((s) => (
                   <div key={s} className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: SCALE_COLORS[s] }} />
-                      <span style={{ color: "#94a3b8" }}>{s}</span>
-                    </div>
-                    <span style={{ color: "#475569" }}>{SCALE_EN[s]}</span>
+                    <span className="bg-white border-2 border-black px-2 py-0.5 uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" style={{ background: SCALE_COLORS[s] }}>
+                      {s}
+                    </span>
+                    <span className="uppercase text-[10px]">{SCALE_EN[s]}</span>
                   </div>
                 ))}
               </div>
-              <div className="mt-3 pt-3 space-y-1" style={{ borderTop: "1px solid rgba(99,102,241,0.12)" }}>
-                <div className="text-[10px]" style={{ color: "#475569" }}>Benchmark ranges (per skala):</div>
+              <div className="mt-5 pt-4 space-y-2 border-t-[3px] border-black">
+                <div className="text-[10px] font-black uppercase mb-2">Benchmark Ranges:</div>
                 {[
-                  { range: "≥ 1.75", label: "Excellent", color: "#10b981" },
-                  { range: "0.72 – 1.74", label: "Good", color: "#6366f1" },
-                  { range: "-0.70 – 0.71", label: "Neutral", color: "#f59e0b" },
-                  { range: "-1.50 – -0.71", label: "Below Average", color: "#ef4444" },
-                  { range: "< -1.50", label: "Bad", color: "#dc2626" },
+                  { range: "≥ 1.75", label: "Excellent" },
+                  { range: "0.72 – 1.74", label: "Good" },
+                  { range: "-0.70 – 0.71", label: "Neutral" },
+                  { range: "-1.50 – -0.71", label: "Below Avg" },
+                  { range: "< -1.50", label: "Bad" },
                 ].map((b) => (
-                  <div key={b.label} className="flex items-center justify-between text-[10px]">
-                    <span style={{ color: "#475569" }}>{b.range}</span>
-                    <span style={{ color: b.color }}>{b.label}</span>
+                  <div key={b.label} className="flex items-center justify-between text-xs font-bold uppercase">
+                    <span className="bg-white border border-black px-1">{b.range}</span>
+                    <span>{b.label}</span>
                   </div>
                 ))}
               </div>
@@ -565,8 +551,9 @@ export default function UeqCalculator() {
         </div>
       </main>
 
-      <div className="ad-placeholder w-full" style={{ height: "90px" }} role="complementary"><span>Advertisement · 728 × 90</span></div>
-      <footer className="relative z-10 text-center py-4 text-xs" style={{ color: "#1e293b" }}>© 2025 AcademicTools · Kalkulator UEQ gratis untuk mahasiswa Indonesia</footer>
+      <div className="p-4 flex justify-center mt-8">
+      </div>
+      <footer className="relative z-10 text-center py-6 font-bold text-sm border-t-[3px] border-black mt-4 bg-white">© 2025 AcademicTools</footer>
     </div>
   );
 }

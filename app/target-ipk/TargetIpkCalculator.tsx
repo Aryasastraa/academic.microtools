@@ -30,91 +30,77 @@ export default function TargetIpkCalculator() {
   }, [currentSks, currentIpk, targetSks, targetIpk]);
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#050818" }}>
-      {/* Ambient background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div className="absolute top-0 right-1/4 w-96 h-96 rounded-full blur-3xl animate-float"
-          style={{ background: "rgba(236,72,153,0.07)" }} />
-        <div className="absolute bottom-1/3 left-1/4 w-80 h-80 rounded-full blur-3xl animate-float-2"
-          style={{ background: "rgba(139,92,246,0.06)" }} />
-      </div>
-
+    <div className="min-h-screen flex flex-col">
       {/* Header Ad */}
-      <div className="ad-placeholder w-full" style={{ height: "90px" }} role="complementary">
-        <span>Advertisement · 728 × 90</span>
+      <div className="p-4 flex justify-center mt-2">
       </div>
 
       <nav className="relative z-10 flex items-center justify-between px-5 py-4 max-w-4xl mx-auto w-full">
-        <Link href="/" className="flex items-center gap-2 text-sm transition-colors" style={{ color: "#64748b" }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#f1f5f9")}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#64748b")}>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        <Link href="/" className="flex items-center gap-2 font-black uppercase text-sm border-2 border-transparent hover:border-black hover:bg-black hover:text-white px-3 py-1 rounded transition-all">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          AcademicTools
+          Kembali
         </Link>
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center"
-          style={{ background: "linear-gradient(135deg, #ec4899, #8b5cf6)" }}>
-          <span className="text-white text-xs font-black select-none">A</span>
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center border-[3px] border-black bg-[var(--brand-pink)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform rotate-3">
+          <span className="text-black text-sm font-black select-none">A</span>
         </div>
       </nav>
 
       <main className="relative z-10 max-w-4xl mx-auto w-full px-4 pb-20 flex-1">
         <header className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-4"
-            style={{ background: "rgba(236,72,153,0.1)", border: "1px solid rgba(236,72,153,0.22)", color: "#f472b6" }}>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase mb-4 brutal-badge bg-[var(--brand-pink)]">
             Perencanaan Akademik Kelulusan
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 tracking-tight" style={{ color: "#f1f5f9" }}>
-            Kalkulator <span style={{ background: "linear-gradient(135deg, #ec4899, #8b5cf6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Target IPK</span>
+          <h1 className="text-4xl sm:text-5xl font-black mb-3 tracking-tight uppercase">
+            Target IPK
           </h1>
-          <p className="max-w-lg mx-auto text-sm sm:text-base leading-relaxed" style={{ color: "#64748b" }}>
+          <p className="max-w-lg mx-auto text-base font-bold leading-relaxed">
             Simulasikan nilai rata-rata yang Anda butuhkan di sisa semester untuk mengejar target kelulusan impian.
           </p>
         </header>
 
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Left: Inputs */}
-          <div className="flex-1 min-w-0 space-y-4">
-            <div className="glass-card rounded-2xl p-6">
-              <h2 className="text-sm font-bold mb-4" style={{ color: "#e2e8f0" }}>Data Akademik Saat Ini</h2>
+          <div className="flex-1 min-w-0 space-y-6 w-full">
+            <div className="brutal-card p-6 bg-[var(--brand-blue)]">
+              <h2 className="text-sm font-black uppercase tracking-wider mb-4 border-b-2 border-black pb-1 inline-block">Data Akademik Saat Ini</h2>
               <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold mb-1.5" style={{ color: "#94a3b8" }}>Total SKS Diambil</label>
+                <div className="bg-white p-3 border-[3px] border-black rounded-lg">
+                  <label className="block text-xs font-black uppercase mb-2">Total SKS Diambil</label>
                   <input type="number" min={1} placeholder="Cth: 100" value={currentSks}
                     onChange={(e) => setCurrentSks(e.target.value)}
-                    className="number-input w-full py-3" style={{ fontSize: "1.125rem" }} />
+                    className="text-input w-full font-black text-xl bg-transparent border-0 shadow-none focus:bg-slate-100 p-2" />
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold mb-1.5" style={{ color: "#94a3b8" }}>IPK Saat Ini</label>
+                <div className="bg-white p-3 border-[3px] border-black rounded-lg">
+                  <label className="block text-xs font-black uppercase mb-2">IPK Saat Ini</label>
                   <input type="number" min={0} max={4} step={0.01} placeholder="Cth: 3.25" value={currentIpk}
                     onChange={(e) => setCurrentIpk(e.target.value)}
-                    className="number-input w-full py-3" style={{ fontSize: "1.125rem" }} />
+                    className="text-input w-full font-black text-xl bg-transparent border-0 shadow-none focus:bg-slate-100 p-2" />
                 </div>
               </div>
             </div>
 
-            <div className="glass-card rounded-2xl p-6" style={{ borderColor: "rgba(236,72,153,0.3)" }}>
-              <h2 className="text-sm font-bold mb-4" style={{ color: "#f472b6" }}>Target Kelulusan</h2>
+            <div className="brutal-card p-6 bg-white transform rotate-1">
+              <h2 className="text-sm font-black uppercase tracking-wider mb-4 border-b-2 border-black pb-1 inline-block text-[var(--brand-pink)]">Target Kelulusan</h2>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5" style={{ color: "#94a3b8" }}>Total SKS Kelulusan (S1 = 144)</label>
+                  <label className="block text-xs font-black uppercase mb-2">Total SKS (S1 = 144)</label>
                   <input type="number" min={1} value={targetSks}
                     onChange={(e) => setTargetSks(e.target.value)}
-                    className="number-input w-full py-3" style={{ fontSize: "1.125rem" }} />
+                    className="text-input w-full py-4 text-xl font-black bg-slate-50" />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5" style={{ color: "#94a3b8" }}>Target IPK Lulus</label>
+                  <label className="block text-xs font-black uppercase mb-2">Target IPK Lulus</label>
                   <input type="number" min={0} max={4} step={0.01} value={targetIpk}
                     onChange={(e) => setTargetIpk(e.target.value)}
-                    className="number-input w-full py-3 text-pink-400 font-bold" style={{ fontSize: "1.125rem" }} />
+                    className="text-input w-full py-4 text-xl font-black bg-[var(--brand-yellow)] border-2 border-black" />
                 </div>
               </div>
-              <div className="mt-4 flex gap-2">
+              <div className="mt-5 flex gap-2 flex-wrap">
                 {[3.00, 3.50, 3.75, 4.00].map(val => (
                   <button key={val} onClick={() => setTargetIpk(val.toFixed(2))}
-                    className="text-[10px] px-3 py-1.5 rounded-full font-bold transition-colors"
-                    style={{ background: "rgba(236,72,153,0.1)", color: "#f472b6", border: "1px solid rgba(236,72,153,0.25)" }}>
+                    className="text-xs font-black uppercase px-3 py-2 border-[3px] border-black bg-[var(--brand-pink)] hover:bg-black hover:text-white transition-colors rounded">
                     Target {val.toFixed(2)}
                   </button>
                 ))}
@@ -123,57 +109,58 @@ export default function TargetIpkCalculator() {
           </div>
 
           {/* Right: Results */}
-          <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-4 space-y-4">
-            <div className="glass-card rounded-2xl p-6">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-center mb-5" style={{ color: "#475569" }}>
+          <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-4 space-y-6">
+            <div className="brutal-card p-6 bg-white text-center">
+              <h2 className="text-sm font-black uppercase tracking-wider mb-6 border-b-4 border-black inline-block pb-1">
                 Hasil Simulasi
               </h2>
 
               {!result ? (
-                <div className="text-center py-8">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center animate-pulseRing"
-                    style={{ background: "rgba(236,72,153,0.08)", border: "1px solid rgba(236,72,153,0.2)" }}>
-                    <span className="font-black text-2xl" style={{ color: "rgba(236,72,153,0.4)" }}>🎯</span>
+                <div className="py-10">
+                  <div className="w-24 h-24 mx-auto mb-6 rounded-full border-4 border-black border-dashed flex items-center justify-center bg-slate-100 transform rotate-12">
+                    <span className="font-black text-4xl">🎯</span>
                   </div>
-                  <p className="text-xs" style={{ color: "#334155" }}>
-                    Lengkapi SKS dan IPK saat ini<br />untuk melihat hasil simulasi
+                  <p className="text-sm font-bold">
+                    Lengkapi SKS dan IPK saat ini untuk melihat hasil simulasi
                   </p>
                 </div>
               ) : "error" in result ? (
-                <div className="text-center py-6 px-2">
-                  <span className="text-3xl mb-3 block">⚠️</span>
-                  <p className="text-xs leading-relaxed" style={{ color: "#ef4444" }}>{result.error}</p>
+                <div className="py-10 px-2 bg-[var(--brand-pink)] border-2 border-black rounded shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                  <span className="text-4xl mb-4 block">⚠️</span>
+                  <p className="text-sm font-black uppercase">{result.error}</p>
                 </div>
               ) : (
                 <>
-                  <div className="text-center mb-6">
-                    <div className="text-sm font-semibold mb-1" style={{ color: "#94a3b8" }}>Sisa SKS Anda: <span style={{ color: "#f1f5f9" }}>{result.sRem} SKS</span></div>
-                    <div className="text-xs" style={{ color: "#64748b" }}>Rata-rata IP / Nilai yang dibutuhkan di sisa SKS:</div>
+                  <div className="mb-6">
+                    <div className="text-sm font-black uppercase mb-2 border-2 border-black p-2 bg-[var(--brand-yellow)] inline-block transform -rotate-2">
+                      Sisa SKS Anda: {result.sRem} SKS
+                    </div>
+                    <div className="text-xs font-bold mt-4">Rata-rata Nilai / IP yang dibutuhkan:</div>
                     
-                    <div className="text-6xl font-black mt-3 mb-1" style={{ color: result.iReq > 4 ? "#ef4444" : "#f472b6" }}>
+                    <div className={`text-6xl font-black mt-3 mb-2 p-4 border-[4px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] inline-block ${result.iReq > 4 ? "bg-[var(--brand-pink)] text-white" : "bg-[var(--brand-mint)]"}`}>
                       {result.iReq.toFixed(2)}
                     </div>
                   </div>
 
                   {result.iReq > 4 ? (
-                    <div className="mt-4 p-4 rounded-xl" style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)" }}>
-                      <div className="font-bold text-sm text-red-500 mb-1">Misi Mustahil ❌</div>
-                      <p className="text-xs leading-relaxed text-red-400">
-                        Maaf, meskipun Anda mendapat nilai A (4.00) di semua sisa {result.sRem} SKS, Anda tidak akan bisa mencapai target IPK {targetIpk}. Pertimbangkan untuk menurunkan target.
+                    <div className="mt-6 p-4 bg-[var(--brand-pink)] border-[3px] border-black text-left">
+                      <div className="font-black text-lg uppercase mb-2 border-b-2 border-black pb-1">Misi Mustahil ❌</div>
+                      <p className="text-xs font-bold">
+                        Maaf, meskipun Anda mendapat nilai A (4.00) di semua sisa <strong>{result.sRem} SKS</strong>, Anda tidak akan bisa mencapai target IPK <strong>{targetIpk}</strong>. Pertimbangkan untuk menurunkan target.
                       </p>
                     </div>
                   ) : result.iReq <= 0 ? (
-                    <div className="mt-4 p-4 rounded-xl" style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)" }}>
-                      <div className="font-bold text-sm text-emerald-500 mb-1">Target Sudah Tercapai! 🎉</div>
-                      <p className="text-xs leading-relaxed text-emerald-400">
-                        Anda bahkan tidak perlu mengambil kelas lagi untuk mempertahankan target ini.
+                    <div className="mt-6 p-4 bg-[var(--brand-mint)] border-[3px] border-black text-left">
+                      <div className="font-black text-lg uppercase mb-2 border-b-2 border-black pb-1">Target Tercapai! 🎉</div>
+                      <p className="text-xs font-bold">
+                        Anda sudah mencapai target! Tetap semangat mempertahankan nilai.
                       </p>
                     </div>
                   ) : (
-                    <div className="mt-4 p-4 rounded-xl" style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.3)" }}>
-                      <div className="font-bold text-sm mb-1" style={{ color: "#a78bfa" }}>Strategi Kelulusan 🚀</div>
-                      <p className="text-xs leading-relaxed" style={{ color: "#c4b5fd" }}>
-                        Untuk mencapai target IPK <strong className="text-white">{targetIpk}</strong>, Anda wajib mendapat rata-rata Indeks Prestasi Minimal <strong className="text-white">{result.iReq.toFixed(2)}</strong> di sisa <strong className="text-white">{result.sRem} SKS</strong>. 
+                    <div className="mt-6 p-4 bg-[var(--brand-blue)] border-[3px] border-black text-left transform rotate-1">
+                      <div className="font-black text-lg uppercase mb-2 border-b-2 border-black pb-1">Strategi Kelulusan 🚀</div>
+                      <p className="text-xs font-bold leading-relaxed">
+                        Untuk IPK <strong>{targetIpk}</strong>, Anda wajib mendapat Indeks Prestasi Minimal <span className="bg-white px-1 border border-black">{result.iReq.toFixed(2)}</span> di sisa <strong>{result.sRem} SKS</strong>. 
                         {result.iReq >= 3.5 ? " Usahakan mendapat mayoritas nilai A!" : result.iReq >= 3.0 ? " Mayoritas nilai B sudah cukup, tapi A lebih aman." : ""}
                       </p>
                     </div>
@@ -181,15 +168,11 @@ export default function TargetIpkCalculator() {
                 </>
               )}
             </div>
-            
-            <div className="ad-placeholder rounded-2xl" style={{ height: "120px" }} role="complementary">
-              <span>Advertisement · 300 × 250</span>
-            </div>
           </aside>
         </div>
       </main>
 
-      <footer className="relative z-10 text-center py-4 text-xs" style={{ color: "#1e293b" }}>
+      <footer className="relative z-10 text-center py-6 font-bold text-sm border-t-[3px] border-black mt-8 bg-white">
         © 2025 AcademicTools
       </footer>
     </div>

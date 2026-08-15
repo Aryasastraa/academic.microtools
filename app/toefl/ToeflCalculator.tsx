@@ -68,161 +68,142 @@ export default function ToeflCalculator() {
   }, [listening, structure, reading]);
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#050818" }}>
-      {/* Ambient background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl animate-float"
-          style={{ background: "rgba(59,130,246,0.07)" }} />
-        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 rounded-full blur-3xl animate-float-2"
-          style={{ background: "rgba(14,165,233,0.06)" }} />
-      </div>
-
+    <div className="min-h-screen flex flex-col">
       {/* Header Ad */}
-      <div className="ad-placeholder w-full" style={{ height: "90px" }} role="complementary">
-        <span>Advertisement · 728 × 90</span>
+      <div className="p-4 flex justify-center mt-2">
       </div>
 
       <nav className="relative z-10 flex items-center justify-between px-5 py-4 max-w-4xl mx-auto w-full">
-        <Link href="/" className="flex items-center gap-2 text-sm transition-colors" style={{ color: "#64748b" }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#f1f5f9")}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#64748b")}>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        <Link href="/" className="flex items-center gap-2 font-black uppercase text-sm border-2 border-transparent hover:border-black hover:bg-black hover:text-white px-3 py-1 rounded transition-all">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          AcademicTools
+          Kembali
         </Link>
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center"
-          style={{ background: "linear-gradient(135deg, #3b82f6, #0ea5e9)" }}>
-          <span className="text-white text-xs font-black select-none">A</span>
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center border-[3px] border-black bg-[var(--brand-blue)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform rotate-3">
+          <span className="text-black text-sm font-black select-none">A</span>
         </div>
       </nav>
 
       <main className="relative z-10 max-w-4xl mx-auto w-full px-4 pb-20 flex-1">
         <header className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-4"
-            style={{ background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.22)", color: "#60a5fa" }}>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase mb-4 brutal-badge bg-[var(--brand-blue)]">
             Syarat Sidang Skripsi · Konversi ITP / PBT
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 tracking-tight" style={{ color: "#f1f5f9" }}>
-            Kalkulator Konversi <span style={{ background: "linear-gradient(135deg, #3b82f6, #0ea5e9)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>TOEFL</span>
+          <h1 className="text-4xl sm:text-5xl font-black mb-3 tracking-tight uppercase">
+            Konversi TOEFL
           </h1>
-          <p className="max-w-lg mx-auto text-sm sm:text-base leading-relaxed" style={{ color: "#64748b" }}>
+          <p className="max-w-lg mx-auto text-base font-bold leading-relaxed">
             Masukkan jumlah jawaban yang benar dari masing-masing section untuk mengetahui prediksi skor TOEFL Anda.
           </p>
         </header>
 
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Left: Inputs */}
-          <div className="flex-1 min-w-0 space-y-4">
+          <div className="flex-1 min-w-0 space-y-6 w-full">
             {/* Listening */}
-            <div className="glass-card rounded-2xl p-6" style={{ borderColor: result && result.lRaw > 50 ? "rgba(239,68,68,0.5)" : undefined }}>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-                  style={{ background: "rgba(59,130,246,0.15)", color: "#60a5fa" }}>1</div>
+            <div className="brutal-card p-6 bg-[var(--brand-mint)] transform -rotate-1">
+              <div className="flex items-center gap-3 mb-4 border-b-2 border-black pb-3">
+                <div className="w-10 h-10 rounded bg-white border-2 border-black flex items-center justify-center text-xl font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">1</div>
                 <div>
-                  <h2 className="text-sm font-bold" style={{ color: "#e2e8f0" }}>Listening Comprehension</h2>
-                  <p className="text-xs" style={{ color: "#64748b" }}>Total 50 Pertanyaan</p>
+                  <h2 className="text-lg font-black uppercase tracking-tight">Listening Comprehension</h2>
+                  <p className="text-xs font-bold uppercase bg-black text-white px-1 mt-1 inline-block">Total 50 Pertanyaan</p>
                 </div>
               </div>
-              <label className="block text-xs font-semibold mt-4 mb-2" style={{ color: "#94a3b8" }}>Jumlah Jawaban Benar</label>
+              <label className="block text-sm font-black uppercase mb-2">Jumlah Jawaban Benar</label>
               <input type="number" min={0} max={50} placeholder="Cth: 35" value={listening}
                 onChange={(e) => setListening(e.target.value)}
-                className="number-input w-full py-3" style={{ fontSize: "1.125rem" }} />
+                className="text-input w-full py-4 text-xl font-black bg-white" />
             </div>
 
             {/* Structure */}
-            <div className="glass-card rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-                  style={{ background: "rgba(16,185,129,0.15)", color: "#34d399" }}>2</div>
+            <div className="brutal-card p-6 bg-[var(--brand-yellow)]">
+              <div className="flex items-center gap-3 mb-4 border-b-2 border-black pb-3">
+                <div className="w-10 h-10 rounded bg-white border-2 border-black flex items-center justify-center text-xl font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">2</div>
                 <div>
-                  <h2 className="text-sm font-bold" style={{ color: "#e2e8f0" }}>Structure &amp; Written Expression</h2>
-                  <p className="text-xs" style={{ color: "#64748b" }}>Total 40 Pertanyaan</p>
+                  <h2 className="text-lg font-black uppercase tracking-tight">Structure &amp; Written</h2>
+                  <p className="text-xs font-bold uppercase bg-black text-white px-1 mt-1 inline-block">Total 40 Pertanyaan</p>
                 </div>
               </div>
-              <label className="block text-xs font-semibold mt-4 mb-2" style={{ color: "#94a3b8" }}>Jumlah Jawaban Benar</label>
+              <label className="block text-sm font-black uppercase mb-2">Jumlah Jawaban Benar</label>
               <input type="number" min={0} max={40} placeholder="Cth: 28" value={structure}
                 onChange={(e) => setStructure(e.target.value)}
-                className="number-input w-full py-3" style={{ fontSize: "1.125rem" }} />
+                className="text-input w-full py-4 text-xl font-black bg-white" />
             </div>
 
             {/* Reading */}
-            <div className="glass-card rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-                  style={{ background: "rgba(245,158,11,0.15)", color: "#fbbf24" }}>3</div>
+            <div className="brutal-card p-6 bg-[var(--brand-pink)] transform rotate-1">
+              <div className="flex items-center gap-3 mb-4 border-b-2 border-black pb-3">
+                <div className="w-10 h-10 rounded bg-white border-2 border-black flex items-center justify-center text-xl font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">3</div>
                 <div>
-                  <h2 className="text-sm font-bold" style={{ color: "#e2e8f0" }}>Reading Comprehension</h2>
-                  <p className="text-xs" style={{ color: "#64748b" }}>Total 50 Pertanyaan</p>
+                  <h2 className="text-lg font-black uppercase tracking-tight">Reading Comprehension</h2>
+                  <p className="text-xs font-bold uppercase bg-black text-white px-1 mt-1 inline-block">Total 50 Pertanyaan</p>
                 </div>
               </div>
-              <label className="block text-xs font-semibold mt-4 mb-2" style={{ color: "#94a3b8" }}>Jumlah Jawaban Benar</label>
+              <label className="block text-sm font-black uppercase mb-2">Jumlah Jawaban Benar</label>
               <input type="number" min={0} max={50} placeholder="Cth: 42" value={reading}
                 onChange={(e) => setReading(e.target.value)}
-                className="number-input w-full py-3" style={{ fontSize: "1.125rem" }} />
+                className="text-input w-full py-4 text-xl font-black bg-white" />
             </div>
           </div>
 
           {/* Right: Results */}
-          <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-4 space-y-4">
-            <div className="glass-card rounded-2xl p-6">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-center mb-5" style={{ color: "#475569" }}>
+          <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-4 space-y-6">
+            <div className="brutal-card p-6 bg-white text-center">
+              <h2 className="text-sm font-black uppercase tracking-wider mb-6 border-b-4 border-black inline-block pb-1">
                 Prediksi Skor Akhir
               </h2>
 
               {!result ? (
-                <div className="text-center py-8">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center animate-pulseRing"
-                    style={{ background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)" }}>
-                    <span className="font-black text-2xl" style={{ color: "rgba(59,130,246,0.4)" }}>A+</span>
+                <div className="py-10">
+                  <div className="w-24 h-24 mx-auto mb-6 rounded-full border-4 border-black border-dashed flex items-center justify-center bg-slate-100 transform -rotate-12">
+                    <span className="font-black text-4xl">A+</span>
                   </div>
-                  <p className="text-xs" style={{ color: "#334155" }}>
-                    Isi jawaban benar dari ketiga sesi<br />untuk melihat hasil konversi
+                  <p className="text-sm font-bold">
+                    Isi jawaban benar dari ketiga sesi untuk melihat hasil konversi
                   </p>
                 </div>
               ) : (
                 <>
-                  <div className="text-center mb-6">
-                    <div className="text-6xl font-black mt-3 mb-1" style={{ color: result.totalScore >= 500 ? "#3b82f6" : "#f59e0b" }}>
+                  <div className="mb-6">
+                    <div className={`text-6xl font-black mt-3 mb-4 p-4 border-[4px] border-black inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${result.totalScore >= 450 ? "bg-[var(--brand-mint)]" : "bg-[var(--brand-pink)]"}`}>
                       {result.totalScore}
                     </div>
                     {result.totalScore >= 450 ? (
-                      <span className="inline-block mt-2 px-3 py-1 rounded-full text-[10px] font-bold" style={{ background: "rgba(16,185,129,0.15)", color: "#34d399", border: "1px solid rgba(16,185,129,0.3)" }}>✓ Umumnya Memenuhi Syarat Sidang</span>
+                      <div className="font-black text-sm uppercase bg-black text-white px-2 py-1 inline-block transform rotate-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">✓ Memenuhi Syarat Sidang (Umumnya)</div>
                     ) : (
-                      <span className="inline-block mt-2 px-3 py-1 rounded-full text-[10px] font-bold" style={{ background: "rgba(239,68,68,0.15)", color: "#f87171", border: "1px solid rgba(239,68,68,0.3)" }}>⚠ Di Bawah Syarat Standar (450)</span>
+                      <div className="font-black text-sm uppercase bg-black text-white px-2 py-1 inline-block transform -rotate-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">⚠ Di Bawah Syarat Standar (450)</div>
                     )}
                   </div>
 
-                  <div className="space-y-2 mt-4 pt-4" style={{ borderTop: "1px solid rgba(59,130,246,0.1)" }}>
-                    <div className="flex justify-between items-center p-2.5 rounded-xl" style={{ background: "rgba(59,130,246,0.05)" }}>
-                      <span className="text-xs text-blue-400">Section 1 (Scaled)</span>
-                      <span className="font-bold text-sm text-blue-300">{result.lScaled}</span>
+                  <div className="space-y-3 mt-6 pt-4 border-t-4 border-black">
+                    <div className="flex justify-between items-center p-3 border-2 border-black font-bold uppercase text-xs bg-[var(--brand-mint)]">
+                      <span>Section 1 (Scaled)</span>
+                      <span className="font-black text-base bg-white px-2 border-2 border-black">{result.lScaled}</span>
                     </div>
-                    <div className="flex justify-between items-center p-2.5 rounded-xl" style={{ background: "rgba(16,185,129,0.05)" }}>
-                      <span className="text-xs text-emerald-400">Section 2 (Scaled)</span>
-                      <span className="font-bold text-sm text-emerald-300">{result.sScaled}</span>
+                    <div className="flex justify-between items-center p-3 border-2 border-black font-bold uppercase text-xs bg-[var(--brand-yellow)]">
+                      <span>Section 2 (Scaled)</span>
+                      <span className="font-black text-base bg-white px-2 border-2 border-black">{result.sScaled}</span>
                     </div>
-                    <div className="flex justify-between items-center p-2.5 rounded-xl" style={{ background: "rgba(245,158,11,0.05)" }}>
-                      <span className="text-xs text-amber-400">Section 3 (Scaled)</span>
-                      <span className="font-bold text-sm text-amber-300">{result.rScaled}</span>
+                    <div className="flex justify-between items-center p-3 border-2 border-black font-bold uppercase text-xs bg-[var(--brand-pink)]">
+                      <span>Section 3 (Scaled)</span>
+                      <span className="font-black text-base bg-white px-2 border-2 border-black">{result.rScaled}</span>
                     </div>
                   </div>
 
-                  <div className="mt-4 p-3 rounded-xl text-xs leading-relaxed" style={{ background: "rgba(148,163,184,0.05)", border: "1px solid rgba(148,163,184,0.1)", color: "#94a3b8" }}>
-                    Skor akhir dihitung dari penjumlahan nilai konversi (scaled score) dikali 10, lalu dibagi 3.
+                  <div className="mt-6 p-4 border-2 border-black bg-slate-100 text-left transform rotate-1">
+                    <p className="text-xs font-bold leading-relaxed uppercase">
+                      Skor akhir dihitung dari penjumlahan nilai konversi dikali 10, lalu dibagi 3.
+                    </p>
                   </div>
                 </>
               )}
-            </div>
-            
-            <div className="ad-placeholder rounded-2xl" style={{ height: "120px" }} role="complementary">
-              <span>Advertisement · 300 × 250</span>
             </div>
           </aside>
         </div>
       </main>
 
-      <footer className="relative z-10 text-center py-4 text-xs" style={{ color: "#1e293b" }}>
+      <footer className="relative z-10 text-center py-6 font-bold text-sm border-t-[3px] border-black mt-8 bg-white">
         © 2025 AcademicTools
       </footer>
     </div>
