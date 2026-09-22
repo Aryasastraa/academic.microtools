@@ -19,7 +19,7 @@ const TOOLS = [
     accentColor: "var(--brand-blue)",
     icon: (
       <svg className="w-7 h-7 text-black" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" 
+        <path strokeLinecap="round" strokeLinejoin="round"
           d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
       </svg>
     ),
@@ -33,7 +33,7 @@ const TOOLS = [
     accentColor: "var(--brand-mint)",
     icon: (
       <svg className="w-7 h-7 text-black" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" 
+        <path strokeLinecap="round" strokeLinejoin="round"
           d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
       </svg>
     ),
@@ -47,7 +47,7 @@ const TOOLS = [
     accentColor: "var(--brand-yellow)",
     icon: (
       <svg className="w-7 h-7 text-black" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" 
+        <path strokeLinecap="round" strokeLinejoin="round"
           d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     ),
@@ -61,7 +61,7 @@ const TOOLS = [
     accentColor: "var(--brand-orange)",
     icon: (
       <svg className="w-7 h-7 text-black" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" 
+        <path strokeLinecap="round" strokeLinejoin="round"
           d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
     ),
@@ -75,7 +75,7 @@ const TOOLS = [
     accentColor: "var(--brand-pink)",
     icon: (
       <svg className="w-7 h-7 text-black" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" 
+        <path strokeLinecap="round" strokeLinejoin="round"
           d="M13 10V3L4 14h7v7l9-11h-7z" />
       </svg>
     ),
@@ -89,7 +89,7 @@ const TOOLS = [
     accentColor: "var(--brand-emerald)",
     icon: (
       <svg className="w-7 h-7 text-black" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" 
+        <path strokeLinecap="round" strokeLinejoin="round"
           d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
       </svg>
     ),
@@ -103,7 +103,7 @@ const TOOLS = [
     accentColor: "var(--brand-lilac)",
     icon: (
       <svg className="w-7 h-7 text-black" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" 
+        <path strokeLinecap="round" strokeLinejoin="round"
           d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
       </svg>
     ),
@@ -127,7 +127,7 @@ export default function HomePage() {
             <span className="text-black font-black text-xl select-none">A</span>
           </div>
           <span className="text-2xl font-black tracking-tight uppercase" style={{ WebkitTextStroke: "1px black" }}>
-            Academic<span className="text-transparent bg-clip-text bg-gradient-to-r from-black to-black" style={{WebkitTextStroke: "0"}}>Tools</span>
+            Academic<span className="text-transparent bg-clip-text bg-gradient-to-r from-black to-black" style={{ WebkitTextStroke: "0" }}>Tools</span>
           </span>
         </div>
 
@@ -136,7 +136,7 @@ export default function HomePage() {
           {/* Decorative shapes */}
           <div className="absolute -top-4 -left-4 w-8 h-8 rounded-full border-[3px] border-black bg-[var(--brand-pink)]"></div>
           <div className="absolute -bottom-4 -right-4 w-12 h-12 border-[3px] border-black bg-[var(--brand-mint)] transform rotate-12"></div>
-          
+
           <h1 className="text-4xl sm:text-6xl font-black mb-6 leading-tight tracking-tight uppercase">
             Kalkulator Akademik<br />
             <span className="bg-[var(--brand-yellow)] px-2 inline-block transform rotate-1 border-2 border-black mt-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
@@ -145,7 +145,7 @@ export default function HomePage() {
           </h1>
 
           <p className="max-w-xl mx-auto text-base sm:text-lg font-bold leading-relaxed">
-            Hitung skor SUS, UEQ, UAT, Sampel Slovin, dan IPK secara real-time. 
+            Hitung skor SUS, UEQ, UAT, Sampel Slovin, dan IPK secara real-time.
             Gratis, tanpa login, bisa dibagikan via link.
           </p>
         </div>
@@ -158,13 +158,13 @@ export default function HomePage() {
               href={tool.href}
               id={tool.id}
               className="brutal-card brutal-card-hover p-6 flex flex-col group relative overflow-hidden"
-              style={{ 
-                background: "white", 
+              style={{
+                background: "white",
                 borderTop: `8px solid ${tool.accentColor}`
               }}
             >
               {/* Icon Container */}
-              <div 
+              <div
                 className="w-14 h-14 border-[3px] border-black rounded-lg flex items-center justify-center mb-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                 style={{ background: tool.accentColor }}
               >
